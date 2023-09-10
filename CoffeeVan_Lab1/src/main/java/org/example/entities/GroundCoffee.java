@@ -2,8 +2,10 @@ package org.example.entities;
 
 import jakarta.persistence.Entity;
 
+import java.io.Serializable;
+
 @Entity
-public class GroundCoffee extends Coffee {
+public class GroundCoffee extends Coffee{
 
     private String grindType; // e.g., "Coarse", "Medium", "Fine"
     private String intensity; // e.g., "Mild", "Medium", "Strong"
@@ -13,14 +15,18 @@ public class GroundCoffee extends Coffee {
         super();
     }
 
-    public GroundCoffee(Long id, double price, double volume, double weight, String roastLevel, CoffeeSort sort, Pack pack, String grindType, String intensity) {
-        super(id, price, volume, weight, roastLevel, sort, pack);
+    public GroundCoffee(Long id, double price, double volume, double weight, String roastLevel, CoffeeSort sort, Pack pack, CoffeeVan van, String grindType, String intensity) {
+        super(id, price, volume, weight, roastLevel, sort, pack, van);
         this.grindType = grindType;
         this.intensity = intensity;
     }
 
     public GroundCoffee(CoffeeSort sort, Pack pack) {
         super(sort, pack);
+    }
+
+    public GroundCoffee(CoffeeSort sort, Pack pack, CoffeeVan van) {
+        super(sort, pack, van);
     }
 
     public String getGrindType() {

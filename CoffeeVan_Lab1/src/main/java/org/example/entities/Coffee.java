@@ -2,8 +2,10 @@ package org.example.entities;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @MappedSuperclass
-public abstract class Coffee {
+public abstract class Coffee implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,15 +27,25 @@ public abstract class Coffee {
     @JoinColumn(name = "pack_id")
     protected Pack pack;
 
-    // Constructors
+    @ManyToOne
+    @JoinColumn(name = "van_id")
+    protected CoffeeVan van;
 
+
+    // Constructors
 
     public Coffee(CoffeeSort sort, Pack pack) {
         this.sort = sort;
         this.pack = pack;
     }
 
-    public Coffee(Long id, double price, double volume, double weight, String roastLevel, CoffeeSort sort, Pack pack) {
+    public Coffee(CoffeeSort sort, Pack pack, CoffeeVan van) {
+        this.sort = sort;
+        this.pack = pack;
+        this.van = van;
+    }
+
+    public Coffee(Long id, double price, double volume, double weight, String roastLevel, CoffeeSort sort, Pack pack, CoffeeVan van) {
         this.id = id;
         this.price = price;
         this.volume = volume;
@@ -41,6 +53,7 @@ public abstract class Coffee {
         this.roastLevel = roastLevel;
         this.sort = sort;
         this.pack = pack;
+        this.van = van;
     }
 
     public Coffee() {
@@ -48,6 +61,14 @@ public abstract class Coffee {
 
     // Getters and Setters
 
+
+    public CoffeeVan getVan() {
+        return van;
+    }
+
+    public void setVan(CoffeeVan van) {
+        this.van = van;
+    }
 
     public Long getId() {
         return id;
