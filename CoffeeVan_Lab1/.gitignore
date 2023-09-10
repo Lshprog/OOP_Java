@@ -36,4 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
-/src/main/resources/databasesettings.properties
+
+/src/test/java/databasetests/DatabaseConnectionTest.java
+
+/src/main/resources/hibernate.cfg.xml
