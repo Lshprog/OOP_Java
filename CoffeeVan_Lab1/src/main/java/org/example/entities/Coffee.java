@@ -15,6 +15,40 @@ public abstract class Coffee {
 
     protected double weight;
 
+    private String roastLevel;
+
+    @ManyToOne
+    @JoinColumn(name = "sort_id")
+    protected CoffeeSort sort;
+
+    @ManyToOne
+    @JoinColumn(name = "pack_id")
+    protected Pack pack;
+
+    // Constructors
+
+
+    public Coffee(CoffeeSort sort, Pack pack) {
+        this.sort = sort;
+        this.pack = pack;
+    }
+
+    public Coffee(Long id, double price, double volume, double weight, String roastLevel, CoffeeSort sort, Pack pack) {
+        this.id = id;
+        this.price = price;
+        this.volume = volume;
+        this.weight = weight;
+        this.roastLevel = roastLevel;
+        this.sort = sort;
+        this.pack = pack;
+    }
+
+    public Coffee() {
+    }
+
+    // Getters and Setters
+
+
     public Long getId() {
         return id;
     }
@@ -47,6 +81,14 @@ public abstract class Coffee {
         this.weight = weight;
     }
 
+    public String getRoastLevel() {
+        return roastLevel;
+    }
+
+    public void setRoastLevel(String roastLevel) {
+        this.roastLevel = roastLevel;
+    }
+
     public CoffeeSort getSort() {
         return sort;
     }
@@ -62,30 +104,4 @@ public abstract class Coffee {
     public void setPack(Pack pack) {
         this.pack = pack;
     }
-
-    @ManyToOne
-    @JoinColumn(name = "sort_id")
-    protected CoffeeSort sort;
-
-    @ManyToOne
-    @JoinColumn(name = "pack_id")
-    protected Pack pack;
-
-    public Coffee(double price, double volume, double weight, CoffeeSort sort, Pack pack) {
-        this.price = price;
-        this.volume = volume;
-        this.weight = weight;
-        this.sort = sort;
-        this.pack = pack;
-    }
-
-    public Coffee() {
-    }
-
-    public Coffee(CoffeeSort sort, Pack pack) {
-        this.sort = sort;
-        this.pack = pack;
-    }
-
-
 }

@@ -3,7 +3,7 @@ package org.example.entities;
 import jakarta.persistence.Entity;
 
 @Entity
-public class InstantCoffee extends Coffee{
+public class InstantCoffee extends Coffee {
 
     private String dissolvability; // e.g., "Fast", "Medium", "Slow"
     private String flavor; // e.g., "Vanilla", "Hazelnut"
@@ -18,6 +18,12 @@ public class InstantCoffee extends Coffee{
 
     public String getDissolvability() {
         return dissolvability;
+    }
+
+    public InstantCoffee(Long id, double price, double volume, double weight, String roastLevel, CoffeeSort sort, Pack pack, String dissolvability, String flavor) {
+        super(id, price, volume, weight, roastLevel, sort, pack);
+        this.dissolvability = dissolvability;
+        this.flavor = flavor;
     }
 
     public void setDissolvability(String dissolvability) {

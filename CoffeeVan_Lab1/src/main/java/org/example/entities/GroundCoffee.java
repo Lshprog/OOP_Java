@@ -13,6 +13,12 @@ public class GroundCoffee extends Coffee {
         super();
     }
 
+    public GroundCoffee(Long id, double price, double volume, double weight, String roastLevel, CoffeeSort sort, Pack pack, String grindType, String intensity) {
+        super(id, price, volume, weight, roastLevel, sort, pack);
+        this.grindType = grindType;
+        this.intensity = intensity;
+    }
+
     public GroundCoffee(CoffeeSort sort, Pack pack) {
         super(sort, pack);
     }
