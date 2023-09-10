@@ -1,2 +1,7 @@
-package org.example.common.enums;public enum CoffeeState {
+package org.example.common.enums;
+
+public enum CoffeeState {
+
+    GROUND, INSTANT, BEANS
+
 }

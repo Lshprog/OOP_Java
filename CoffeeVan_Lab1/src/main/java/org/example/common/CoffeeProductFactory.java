@@ -1,27 +1,28 @@
 package org.example.common;
 
 import org.example.common.enums.CoffeeState;
+import org.example.entities.*;
 
-public class CoffeeFactory {
+public class CoffeeProductFactory {
 
-    public static Coffee createCoffee(CoffeeState type) {
+        public static Coffee createCoffeeProduct(CoffeeState state, CoffeeSort coffeeSort, Pack pack) {
 
-        switch (type){
+        switch (state){
 
             case BEANS -> {
-                return new CoffeeBeans();
+                return new CoffeeBeans(coffeeSort, pack);
             }
 
             case INSTANT -> {
-                return new InstantCoffee();
+                return new InstantCoffee(coffeeSort, pack);
             }
 
             case GROUND -> {
-                return new GroundCoffee();
+                return new GroundCoffee(coffeeSort, pack);
             }
 
             default -> {
-                throw new IllegalArgumentException("Unsupported coffee type: " + type);
+                throw new IllegalArgumentException("Unsupported coffee type: " + state.toString());
             }
 
         }
