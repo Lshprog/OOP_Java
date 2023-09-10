@@ -1,4 +1,4 @@
-package org.example.dao.dboper;
+package org.example.common.dboper;
 
 import org.example.utils.HibernateUtil;
 import org.hibernate.Session;

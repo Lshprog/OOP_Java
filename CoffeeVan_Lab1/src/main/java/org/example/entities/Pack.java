@@ -21,7 +21,6 @@ public class Pack implements Serializable {
 
     // Constructors, getters, setters
 
-
     public Pack(double price, double volume, double weight, String description) {
 
         this.price = price;

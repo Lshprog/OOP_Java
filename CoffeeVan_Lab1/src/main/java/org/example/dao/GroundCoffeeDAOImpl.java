@@ -1,6 +1,6 @@
 package org.example.dao;
 
-import org.example.dao.dboper.DBOperations;
+import org.example.common.dboper.DBOperations;
 import org.example.entities.GroundCoffee;
 import org.hibernate.query.Query;
 

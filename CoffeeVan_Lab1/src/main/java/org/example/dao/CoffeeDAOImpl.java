@@ -1,14 +1,12 @@
 package org.example.dao;
 
-import org.example.dao.dboper.DBOperations;
+import org.example.common.dboper.DBOperations;
 import org.example.entities.Coffee;
-import org.example.utils.HibernateUtil;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
 
 import java.util.List;
 
-public class CoffeeDAOImpl<T> implements CoffeeDAO<T> {
+public class CoffeeDAOImpl<T extends Coffee> implements CoffeeDAO<T> {
 
     private final Class<T> entityClass;
 
@@ -42,4 +40,14 @@ public class CoffeeDAOImpl<T> implements CoffeeDAO<T> {
                 entityClass).list());
 
     }
+
+    @Override
+    public List<T> getAllByVanId(long van_id) {
+        return DBOperations.executeQuery(session -> session.createQuery(
+                        "FROM " + entityClass.getSimpleName() + " c WHERE c.van.id = :van_id",
+                        entityClass)
+                .setParameter("van_id", van_id)
+                .list());
+    }
+
 }
