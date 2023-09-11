@@ -27,4 +27,15 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
             return query.list();
         });
     }
+
+    @Override
+    public CoffeeVan getCoffeeVanByName(String name) {
+
+        return DBOperations.executeQuery(session -> {
+            Query<CoffeeVan> query = session.createQuery(
+                    "FROM CoffeeVan WHERE name = :name ", CoffeeVan.class);
+            query.setParameter("name", name);
+            return query.getSingleResult();
+        });
+    }
 }

@@ -32,6 +32,12 @@ public class CoffeeVan implements Serializable {
         this.max_weight = max_weight;
     }
 
+    public CoffeeVan(String name, double volume, double max_weight) {
+        this.name = name;
+        this.volume = volume;
+        this.max_weight = max_weight;
+    }
+
     // Getters and Setters
 
 
