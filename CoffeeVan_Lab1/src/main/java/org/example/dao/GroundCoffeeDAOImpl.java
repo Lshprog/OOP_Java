@@ -6,7 +6,7 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class GroundCoffeeDAOImpl extends CoffeeDAOImpl<GroundCoffee> implements GroundCoffeeDAO {
+public class GroundCoffeeDAOImpl extends CoffeeBeansDAOImpl<GroundCoffee> implements GroundCoffeeDAO {
 
     private GroundCoffeeDAOImpl() {
         super(GroundCoffee.class);

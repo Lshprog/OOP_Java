@@ -1,12 +1,12 @@
 package org.example.services;
 
-import org.example.entities.Coffee;
+import org.example.entities.CoffeeBeans;
 
 import java.util.List;
 
 public interface CoffeeService {
 
-    List<Coffee> getAllCoffee();
+    List<CoffeeBeans> getAllCoffee();
 
 
 }

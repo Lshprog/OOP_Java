@@ -1,21 +1,20 @@
 package org.example.services;
 
-import org.example.entities.Coffee;
+import org.example.entities.CoffeeBeans;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class VanServiceImpl implements VanService{
 
     @Override
-    public List<Coffee> getAllCoffeeBasedOnPriceAndWeightRatio(List<Coffee> coffeeList) {
+    public List<CoffeeBeans> getAllCoffeeBasedOnPriceAndWeightRatio(List<CoffeeBeans> coffeeBeansList) {
 
-        Comparator<Coffee> ratioComparator = Comparator.comparingDouble(coffee -> coffee.getPrice() / coffee.getWeight());
+        Comparator<CoffeeBeans> ratioComparator = Comparator.comparingDouble(coffee -> coffee.getPrice() / coffee.getWeight());
 
-        coffeeList.sort(ratioComparator.reversed());
+        coffeeBeansList.sort(ratioComparator.reversed());
 
-        return coffeeList;
+        return coffeeBeansList;
     }
 
 

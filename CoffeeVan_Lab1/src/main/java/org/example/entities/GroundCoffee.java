@@ -2,10 +2,8 @@ package org.example.entities;
 
 import jakarta.persistence.Entity;
 
-import java.io.Serializable;
-
 @Entity
-public class GroundCoffee extends Coffee{
+public class GroundCoffee extends CoffeeBeans {
 
     private String grindType; // e.g., "Coarse", "Medium", "Fine"
     private String intensity; // e.g., "Mild", "Medium", "Strong"

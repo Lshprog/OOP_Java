@@ -2,10 +2,8 @@ package org.example.entities;
 
 import jakarta.persistence.Entity;
 
-import java.io.Serializable;
-
 @Entity
-public class InstantCoffee extends Coffee{
+public class InstantCoffee extends CoffeeBeans {
 
     private String dissolvability; // e.g., "Fast", "Medium", "Slow"
     private String flavor; // e.g., "Vanilla", "Hazelnut"
