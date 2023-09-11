@@ -1,4 +1,4 @@
-package org.example.dao;
+package org.example.dao.coffee;
 
 import org.example.entities.GroundCoffee;
 

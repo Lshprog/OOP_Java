@@ -1,6 +1,7 @@
-package org.example.dao;
+package org.example.dao.coffee;
 
 import org.example.common.dboper.DBOperations;
+import org.example.dao.RepositoryImpl;
 import org.example.entities.CoffeeBeans;
 
 

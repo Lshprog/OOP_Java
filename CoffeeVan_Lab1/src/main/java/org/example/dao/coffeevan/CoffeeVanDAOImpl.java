@@ -1,35 +1,17 @@
 package org.example.dao.coffeevan;
 
 import org.example.common.dboper.DBOperations;
+import org.example.dao.RepositoryImpl;
 import org.example.entities.CoffeeBeans;
 import org.example.entities.CoffeeVan;
 import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class CoffeeVanDAOImpl implements CoffeeVanDAO{
-    @Override
-    public void save(CoffeeVan van) {
-        DBOperations.executeTransaction(session -> {
-            session.persist(van);
-        });
-    }
+public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements CoffeeVanDAO {
 
-    @Override
-    public void delete(CoffeeVan van) {
-        DBOperations.executeTransaction(session -> {
-            session.remove(van);
-        });
-    }
-
-    @Override
-    public CoffeeVan getById(long id) {
-        return DBOperations.executeQuery(session -> session.get(CoffeeVan.class, id));
-    }
-
-    @Override
-    public List<CoffeeVan> getAll() {
-        return null;
+    public CoffeeVanDAOImpl(Class<CoffeeVan> entityClass) {
+        super(entityClass);
     }
 
     @Override

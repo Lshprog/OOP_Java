@@ -126,4 +126,20 @@ public class CoffeeBeans implements Serializable {
     public void setPack(Pack pack) {
         this.pack = pack;
     }
+
+    // To string
+
+    @Override
+    public String toString() {
+        return "CoffeeBeans{" +
+                "price=" + price +
+                ", volume=" + volume +
+                ", weight=" + weight +
+                ", roastLevel='" + roastLevel + '\'' +
+                ", sort=" + sort +
+                ", pack=" + pack +
+                ", van=" + van +
+                '}';
+    }
+
 }

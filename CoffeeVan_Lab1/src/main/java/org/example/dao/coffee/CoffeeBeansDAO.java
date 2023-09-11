@@ -1,5 +1,6 @@
-package org.example.dao;
+package org.example.dao.coffee;
 
+import org.example.dao.Repository;
 import org.example.entities.CoffeeBeans;
 
 import java.util.List;
