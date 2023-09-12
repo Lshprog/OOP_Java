@@ -14,8 +14,12 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
         super(entityClass);
     }
 
+    public CoffeeVanDAOImpl() {
+        super(CoffeeVan.class);
+    }
+
     @Override
-    public List<CoffeeBeans> getAllCoffeeByVanId(long id) {
+    public List<CoffeeBeans> getAllCoffeeByVanId(long vanId) {
         return DBOperations.executeQuery(session -> {
             Query<CoffeeBeans> query = session.createQuery(
                     "SELECT c FROM GroundCoffee c WHERE c.van.id = :vanId " +
@@ -23,7 +27,7 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
                             "SELECT c FROM InstantCoffee c WHERE c.van.id = :vanId " +
                             "UNION " +
                             "SELECT c FROM CoffeeBeans c WHERE c.van.id = :vanId", CoffeeBeans.class);
-            query.setParameter("vanId", id);
+            query.setParameter("vanId", vanId);
             return query.list();
         });
     }
@@ -36,6 +40,39 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
                     "FROM CoffeeVan WHERE name = :name ", CoffeeVan.class);
             query.setParameter("name", name);
             return query.getSingleResult();
+        });
+    }
+
+    @Override
+    public List<CoffeeBeans> getCoffeeByVanIdAndType(long vanId, List<String> classNames) {
+        return DBOperations.executeQuery(session -> {
+            StringBuilder hql = new StringBuilder("SELECT c FROM ");
+
+            for (String className : classNames) {
+                hql.append(className).append(" c");
+
+                if (classNames.indexOf(className) < classNames.size() - 1) {
+                    hql.append(" UNION ");
+                }
+            }
+
+            Query<CoffeeBeans> query = session.createQuery(hql.toString(), CoffeeBeans.class);
+            return query.list();
+        });
+    }
+
+    @Override
+    public List<CoffeeBeans> getAllCoffeeSortedByParam(long vanId, String parameter) {
+        return DBOperations.executeQuery(session -> {
+            Query<CoffeeBeans> query = session.createQuery(
+                    "SELECT c FROM GroundCoffee c WHERE c.van.id = :vanId " +
+                            "UNION " +
+                            "SELECT c FROM InstantCoffee c WHERE c.van.id = :vanId " +
+                            "UNION " +
+                            "SELECT c FROM CoffeeBeans c WHERE c.van.id = :vanId" +
+                            "ORDER BY c." + parameter, CoffeeBeans.class);
+            query.setParameter("vanId", vanId);
+            return query.list();
         });
     }
 }
