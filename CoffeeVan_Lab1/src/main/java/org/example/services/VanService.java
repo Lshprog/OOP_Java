@@ -1,26 +1,35 @@
 package org.example.services;
 
+import org.example.common.CoffeeFilter;
 import org.example.entities.CoffeeBeans;
+import org.example.entities.CoffeeVan;
 
 import java.util.List;
 
 public interface VanService {
 
-    List<CoffeeBeans> sortAllCoffeeBasedOnPriceAndWeightRatio(Long vanId);
 
-    List<CoffeeBeans> sortCoffeeBasedOnParameter(Long vanId, String parameter);
+    // Sorting functions : which take list of coffee as parameters
+    List<CoffeeBeans> sortCoffeeListBasedOnParameter(List<CoffeeBeans> coffeeList, String parameter);
 
-//    List<CoffeeBeans> sortCoffeeBasedOnParameter(List<CoffeeBeans> coffeeBeansList, String parameter);
+    List<CoffeeBeans> sortCoffeeListBasedOnParameters(List<CoffeeBeans> coffeeList, CoffeeFilter filter);
 
-//    List<CoffeeBeans> getAllCoffeeBasedOnPrice(List<CoffeeBeans> coffeeBeansList);
-//
-//    List<CoffeeBeans> getAllCoffeeBasedOnWeight(List<CoffeeBeans> coffeeBeansList);
-//
-//    List<CoffeeBeans> getAllCoffeeBasedOnVolume(List<CoffeeBeans> coffeeBeansList);
+    // Getter functions : call dao functions to get data from db based on specific criteria
+    List<CoffeeBeans> getAllCoffeeAvailableToBeAddedToVan();
 
-//    List<CoffeeBeans> getAllCoffeeBasedOnParameters();
+    List<CoffeeBeans> getAllCoffeeInVanBasedOnPriceAndWeightRatio(Long vanId);
 
-    List<CoffeeBeans> getCoffeeBasedOnParameters(Long vanId, List<String> parameter);
+    List<CoffeeBeans> getAllCoffeeInVan(Long vanId);
+
+    List<CoffeeBeans> getAllCoffeeInVanSortedByParameter(Long vanId, String parameter);
+
+    List<CoffeeBeans> getCoffeeInVanBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames);
+
+    // Load functions : load the particular van with products based on something
+
+    CoffeeVan loadCoffeeVanAutomaticallyBasedOnBudget(CoffeeVan van, Long budget);
+
+    CoffeeVan loadCoffeeProductsByIdToVan(Long vanId, List<Long> idsOfProducts);
 
 
 }

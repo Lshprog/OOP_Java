@@ -1,5 +1,6 @@
 package org.example.dao.coffeevan;
 
+import org.example.common.CoffeeFilter;
 import org.example.common.dboper.DBOperations;
 import org.example.dao.RepositoryImpl;
 import org.example.entities.CoffeeBeans;
@@ -7,6 +8,7 @@ import org.example.entities.CoffeeVan;
 import org.hibernate.query.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements CoffeeVanDAO {
 
@@ -19,7 +21,7 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
     }
 
     @Override
-    public List<CoffeeBeans> getAllCoffeeByVanId(long vanId) {
+    public List<CoffeeBeans> getAllCoffeeByVanId(Long vanId) {
         return DBOperations.executeQuery(session -> {
             Query<CoffeeBeans> query = session.createQuery(
                     "SELECT c FROM GroundCoffee c WHERE c.van.id = :vanId " +
@@ -44,7 +46,7 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
     }
 
     @Override
-    public List<CoffeeBeans> getCoffeeByVanIdAndType(long vanId, List<String> classNames) {
+    public List<CoffeeBeans> getCoffeeByVanIdAndType(Long vanId, List<String> classNames) {
         return DBOperations.executeQuery(session -> {
             StringBuilder hql = new StringBuilder("SELECT c FROM ");
 
@@ -62,7 +64,7 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
     }
 
     @Override
-    public List<CoffeeBeans> getAllCoffeeSortedByParam(long vanId, String parameter) {
+    public List<CoffeeBeans> getAllCoffeeSortedByParam(Long vanId, String parameter) {
         return DBOperations.executeQuery(session -> {
             Query<CoffeeBeans> query = session.createQuery(
                     "SELECT c FROM GroundCoffee c WHERE c.van.id = :vanId " +
@@ -75,4 +77,116 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
             return query.list();
         });
     }
+
+    @Override
+    public List<CoffeeBeans> getCoffeeBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames) {
+        return DBOperations.executeQuery(session -> {
+            StringBuilder hql = new StringBuilder("SELECT c FROM ");
+
+            for(String className : classNames){
+                String hqlpart = className + " c WHERE c.van.id = :vanId";
+
+                if (filter.getMinPrice() != null) {
+                    hqlpart += " AND c.price >= :minPrice";
+                }
+
+                if (filter.getMaxPrice() != null) {
+                    hqlpart += " AND c.price <= :maxPrice";
+                }
+
+                if (filter.getMinVolume() != null) {
+                    hqlpart += " AND c.volume >= :minVolume";
+                }
+
+                if (filter.getMaxVolume() != null) {
+                    hqlpart += " AND c.volume <= :maxVolume";
+                }
+
+                if (filter.getMinWeight() != null) {
+                    hqlpart += " AND c.weight >= :minWeight";
+                }
+
+                if (filter.getMaxWeight() != null) {
+                    hqlpart += " AND c.weight <= :maxWeight";
+                }
+
+                if (filter.getRoastLevel() != null) {
+                    hqlpart += " AND c.roastLevel = :roastLevel";
+                }
+
+                if (filter.getDissolvability() != null && className.equals("InstantCoffee")) {
+                    hqlpart += " AND ((type(c) = InstantCoffee AND c.dissolvability = :dissolvability) OR (type(c) = CoffeeBeans)) OR (type(c) == GroundCoffee)";
+                }
+
+                if (filter.getFlavor() != null && className.equals("InstantCoffee")) {
+                    hqlpart += " AND ((type(c) = InstantCoffee AND c.flavor = :flavor) OR (type(c) = CoffeeBeans)) OR (type(c) == GroundCoffee)";
+                }
+
+                if (filter.getGrindType() != null && className.equals("GroundCoffee")) {
+                    hqlpart += " AND ((type(c) = GroundCoffee AND c.grindType = :grindType) OR (type(c) = CoffeeBeans)) OR (type(c) == InstantCoffee)";
+                }
+
+                if (filter.getIntensity() != null && className.equals("GroundCoffee")) {
+                    hqlpart += " AND ((type(c) = GroundCoffee AND c.intensity = :intensity) OR (type(c) = CoffeeBeans)) OR (type(c) == InstantCoffee)";
+                }
+
+                if(classNames.indexOf(className) != classNames.size() - 1){
+                    hqlpart += " UNION ";
+                }
+
+                hql.append(hqlpart);
+            }
+
+            Query<CoffeeBeans> query = session.createQuery(hql.toString(), CoffeeBeans.class);
+
+            if (filter.getMinPrice() != null) {
+                query.setParameter("minPrice", filter.getMinPrice());
+            }
+
+            if (filter.getMaxPrice() != null) {
+                query.setParameter("maxPrice", filter.getMaxPrice());
+            }
+
+            if (filter.getMinVolume() != null) {
+                query.setParameter("minVolume", filter.getMinVolume());
+            }
+
+            if (filter.getMaxVolume() != null) {
+                query.setParameter("maxVolume", filter.getMaxVolume());
+            }
+
+            if (filter.getMinWeight() != null) {
+                query.setParameter("minWeight", filter.getMinWeight());
+            }
+
+            if (filter.getMaxWeight() != null) {
+                query.setParameter("maxWeight", filter.getMaxWeight());
+            }
+
+            if (filter.getRoastLevel() != null) {
+                query.setParameter("roastLevel", filter.getRoastLevel());
+            }
+
+            if (filter.getDissolvability() != null && classNames.contains("InstantCoffee")) {
+                query.setParameter("dissolvability", filter.getDissolvability());
+            }
+
+            if (filter.getFlavor() != null && classNames.contains("InstantCoffee")) {
+                query.setParameter("flavor", filter.getFlavor());
+            }
+
+            if (filter.getGrindType() != null && classNames.contains("GroundCoffee")) {
+                query.setParameter("grindType", filter.getGrindType());
+            }
+
+            if (filter.getIntensity() != null && classNames.contains("GroundCoffee")) {
+                query.setParameter("intensity", filter.getIntensity());
+            }
+
+            query.setParameter("vanId", vanId);
+
+            return query.list();
+        });
+    }
+
 }
