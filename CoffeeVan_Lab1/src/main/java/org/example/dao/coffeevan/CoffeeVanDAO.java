@@ -2,20 +2,20 @@ package org.example.dao.coffeevan;
 
 import org.example.common.CoffeeFilter;
 import org.example.dao.Repository;
-import org.example.entities.CoffeeBeans;
+import org.example.entities.CoffeeProduct;
 import org.example.entities.CoffeeVan;
 
 import java.util.List;
 
 public interface CoffeeVanDAO extends Repository<CoffeeVan, Long> {
-    List<CoffeeBeans> getAllCoffeeByVanId(Long vanId);
+    List<CoffeeProduct> getAllCoffeeByVanId(Long vanId);
 
     CoffeeVan getCoffeeVanByName(String name);
 
-    List<CoffeeBeans> getCoffeeByVanIdAndType(Long vanId, List<String> classNames);
+    List<CoffeeProduct> getCoffeeByVanIdAndType(Long vanId, List<String> classNames);
 
-    List<CoffeeBeans> getAllCoffeeSortedByParam(Long vanId, String parameter);
+    List<CoffeeProduct> getAllCoffeeSortedByParam(Long vanId, String parameter);
 
-    List<CoffeeBeans> getCoffeeBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames);
+    List<CoffeeProduct> getCoffeeBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames);
 
 }

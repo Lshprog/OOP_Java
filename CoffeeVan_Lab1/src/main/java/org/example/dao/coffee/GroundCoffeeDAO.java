@@ -4,7 +4,7 @@ import org.example.entities.GroundCoffee;
 
 import java.util.List;
 
-public interface GroundCoffeeDAO extends CoffeeBeansDAO<GroundCoffee> {
+public interface GroundCoffeeDAO extends CoffeeProductDAO<GroundCoffee> {
 
     List<GroundCoffee> getByGrindType(String grindType);
 

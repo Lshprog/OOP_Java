@@ -3,12 +3,11 @@ package org.example.dao.coffeevan;
 import org.example.common.CoffeeFilter;
 import org.example.common.dboper.DBOperations;
 import org.example.dao.RepositoryImpl;
-import org.example.entities.CoffeeBeans;
+import org.example.entities.CoffeeProduct;
 import org.example.entities.CoffeeVan;
 import org.hibernate.query.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements CoffeeVanDAO {
 
@@ -21,14 +20,14 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
     }
 
     @Override
-    public List<CoffeeBeans> getAllCoffeeByVanId(Long vanId) {
+    public List<CoffeeProduct> getAllCoffeeByVanId(Long vanId) {
         return DBOperations.executeQuery(session -> {
-            Query<CoffeeBeans> query = session.createQuery(
+            Query<CoffeeProduct> query = session.createQuery(
                     "SELECT c FROM GroundCoffee c WHERE c.van.id = :vanId " +
                             "UNION " +
                             "SELECT c FROM InstantCoffee c WHERE c.van.id = :vanId " +
                             "UNION " +
-                            "SELECT c FROM CoffeeBeans c WHERE c.van.id = :vanId", CoffeeBeans.class);
+                            "SELECT c FROM CoffeeBeans c WHERE c.van.id = :vanId", CoffeeProduct.class);
             query.setParameter("vanId", vanId);
             return query.list();
         });
@@ -46,7 +45,7 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
     }
 
     @Override
-    public List<CoffeeBeans> getCoffeeByVanIdAndType(Long vanId, List<String> classNames) {
+    public List<CoffeeProduct> getCoffeeByVanIdAndType(Long vanId, List<String> classNames) {
         return DBOperations.executeQuery(session -> {
             StringBuilder hql = new StringBuilder("SELECT c FROM ");
 
@@ -58,28 +57,28 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
                 }
             }
 
-            Query<CoffeeBeans> query = session.createQuery(hql.toString(), CoffeeBeans.class);
+            Query<CoffeeProduct> query = session.createQuery(hql.toString(), CoffeeProduct.class);
             return query.list();
         });
     }
 
     @Override
-    public List<CoffeeBeans> getAllCoffeeSortedByParam(Long vanId, String parameter) {
+    public List<CoffeeProduct> getAllCoffeeSortedByParam(Long vanId, String parameter) {
         return DBOperations.executeQuery(session -> {
-            Query<CoffeeBeans> query = session.createQuery(
+            Query<CoffeeProduct> query = session.createQuery(
                     "SELECT c FROM GroundCoffee c WHERE c.van.id = :vanId " +
                             "UNION " +
                             "SELECT c FROM InstantCoffee c WHERE c.van.id = :vanId " +
                             "UNION " +
                             "SELECT c FROM CoffeeBeans c WHERE c.van.id = :vanId" +
-                            "ORDER BY c." + parameter, CoffeeBeans.class);
+                            "ORDER BY c." + parameter, CoffeeProduct.class);
             query.setParameter("vanId", vanId);
             return query.list();
         });
     }
 
     @Override
-    public List<CoffeeBeans> getCoffeeBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames) {
+    public List<CoffeeProduct> getCoffeeBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames) {
         return DBOperations.executeQuery(session -> {
             StringBuilder hql = new StringBuilder("SELECT c FROM ");
 
@@ -137,7 +136,7 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
                 hql.append(hqlpart);
             }
 
-            Query<CoffeeBeans> query = session.createQuery(hql.toString(), CoffeeBeans.class);
+            Query<CoffeeProduct> query = session.createQuery(hql.toString(), CoffeeProduct.class);
 
             if (filter.getMinPrice() != null) {
                 query.setParameter("minPrice", filter.getMinPrice());

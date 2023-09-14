@@ -1,6 +1,6 @@
 package org.example.common;
 
-import org.example.entities.CoffeeBeans;
+import org.example.entities.CoffeeProduct;
 import org.example.entities.GroundCoffee;
 import org.example.entities.InstantCoffee;
 
@@ -28,10 +28,10 @@ public class CoffeeFilter {
     private String intensity;
 
 
-    public List<CoffeeBeans> filterCoffee(List<CoffeeBeans> coffeeBeansList) {
-        List<CoffeeBeans> filteredCoffee = new ArrayList<>();
+    public List<CoffeeProduct> filterCoffee(List<CoffeeProduct> coffeeProductList) {
+        List<CoffeeProduct> filteredCoffee = new ArrayList<>();
 
-        for (CoffeeBeans coffee : coffeeBeansList) {
+        for (CoffeeProduct coffee : coffeeProductList) {
             if (matchesFilterCriteria(coffee)) {
                 filteredCoffee.add(coffee);
             }
@@ -40,7 +40,7 @@ public class CoffeeFilter {
         return filteredCoffee;
     }
 
-    private boolean matchesFilterCriteria(CoffeeBeans coffee) {
+    private boolean matchesFilterCriteria(CoffeeProduct coffee) {
         if (minPrice != null && coffee.getPrice() < minPrice) {
             return false;
         }

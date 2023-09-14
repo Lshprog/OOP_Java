@@ -1,25 +1,13 @@
 package org.example.dao.coffee;
 
-import org.example.common.dboper.DBOperations;
-import org.example.dao.RepositoryImpl;
 import org.example.entities.CoffeeBeans;
+import org.example.entities.GroundCoffee;
+import org.example.entities.InstantCoffee;
 
+public class CoffeeBeansDAOImpl extends CoffeeProductDAOImpl<CoffeeBeans> implements CoffeeBeansDAO{
 
-import java.util.List;
-
-public class CoffeeBeansDAOImpl<T extends CoffeeBeans> extends RepositoryImpl<T, Long> implements CoffeeBeansDAO<T> {
-
-    public CoffeeBeansDAOImpl(Class<T> entityClass) {
-        super(entityClass);
-    }
-
-    @Override
-    public List<T> getAllByVanId(long van_id) {
-        return DBOperations.executeQuery(session -> session.createQuery(
-                        "FROM " + entityClass.getSimpleName() + " c WHERE c.van.id = :van_id",
-                        entityClass)
-                .setParameter("van_id", van_id)
-                .list());
+    public CoffeeBeansDAOImpl() {
+        super(CoffeeBeans.class);
     }
 
 }

@@ -5,7 +5,7 @@ import org.example.entities.*;
 
 public class CoffeeProductFactory {
 
-        public static CoffeeBeans createCoffeeProduct(CoffeeState state, CoffeeSort coffeeSort, Pack pack) {
+        public static CoffeeProduct createCoffeeProduct(CoffeeState state, CoffeeSort coffeeSort, Pack pack) {
 
         switch (state){
 

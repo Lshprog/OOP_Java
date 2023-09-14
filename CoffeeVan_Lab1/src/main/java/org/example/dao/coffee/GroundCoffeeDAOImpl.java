@@ -6,14 +6,10 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class GroundCoffeeDAOImpl extends CoffeeBeansDAOImpl<GroundCoffee> implements GroundCoffeeDAO {
+public class GroundCoffeeDAOImpl extends CoffeeProductDAOImpl<GroundCoffee> implements GroundCoffeeDAO {
 
-    private GroundCoffeeDAOImpl() {
+    public GroundCoffeeDAOImpl() {
         super(GroundCoffee.class);
-    }
-
-    public static GroundCoffeeDAOImpl create() {
-        return new GroundCoffeeDAOImpl();
     }
 
     @Override
