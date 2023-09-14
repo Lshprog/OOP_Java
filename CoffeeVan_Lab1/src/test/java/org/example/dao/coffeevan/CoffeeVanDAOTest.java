@@ -16,7 +16,6 @@ class CoffeeVanDAOTest {
     }
 
     @Test
-    @Transactional
     void testSaveCoffeeVan() {
 
         CoffeeVan coffeeVan = new CoffeeVan("name1",18.1,23.0);
@@ -25,9 +24,26 @@ class CoffeeVanDAOTest {
 
         CoffeeVan coffeeVan1 = coffeeVanDAO.getCoffeeVanByName("name1");
 
-
     }
 
 
+    @Test
+    void getAllCoffeeByVanId() {
+    }
 
+    @Test
+    void getCoffeeVanByName() {
+    }
+
+    @Test
+    void getCoffeeByVanIdAndType() {
+    }
+
+    @Test
+    void getAllCoffeeSortedByParam() {
+    }
+
+    @Test
+    void getCoffeeBasedOnParameters() {
+    }
 }

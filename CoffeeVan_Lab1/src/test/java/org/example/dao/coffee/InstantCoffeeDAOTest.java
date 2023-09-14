@@ -1,22 +1,12 @@
 package org.example.dao.coffee;
 
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
-class GroundCoffeeDAOTest {
+class InstantCoffeeDAOTest {
 
     @BeforeEach
     void setUp() {
     }
-
-    @Test
-    void testSaveCoffeeBeans() {
-
-    }
-
-
 }

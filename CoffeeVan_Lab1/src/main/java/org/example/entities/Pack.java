@@ -29,6 +29,14 @@ public class Pack implements Serializable {
         this.description = description;
     }
 
+    public Pack(Long id, double price, double volume, double weight, String description) {
+        this.id = id;
+        this.price = price;
+        this.volume = volume;
+        this.weight = weight;
+        this.description = description;
+    }
+
     public Pack() {
     }
 
