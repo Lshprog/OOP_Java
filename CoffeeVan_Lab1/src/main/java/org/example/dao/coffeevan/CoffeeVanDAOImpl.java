@@ -4,52 +4,69 @@ import org.example.common.filters.CoffeeFilter;
 import org.example.common.dboper.DBOperations;
 import org.example.common.filters.FilterNode;
 import org.example.dao.RepositoryImpl;
-import org.example.entities.CoffeeProduct;
-import org.example.entities.CoffeeVan;
+import org.example.entities.*;
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements CoffeeVanDAO {
 
+    private final List<Class<? extends CoffeeProduct>> coffeeClasses = new ArrayList<>();
+
+    private void setUp() {
+        coffeeClasses.add(GroundCoffee.class);
+        coffeeClasses.add(InstantCoffee.class);
+        coffeeClasses.add(CoffeeBeans.class);
+    }
+
     public CoffeeVanDAOImpl(Class<CoffeeVan> entityClass) {
         super(entityClass);
+        this.setUp();
     }
 
     public CoffeeVanDAOImpl() {
         super(CoffeeVan.class);
+        this.setUp();
     }
 
     @Override
     public List<CoffeeProduct> getAllCoffeeByVanId(Long vanId) {
-        return DBOperations.executeQuery(session -> {
-            Query<CoffeeProduct> query = session.createQuery(
-                    "SELECT c FROM GroundCoffee c WHERE c.van.id = :vanId " +
-                            "UNION " +
-                            "SELECT c FROM InstantCoffee c WHERE c.van.id = :vanId " +
-                            "UNION " +
-                            "SELECT c FROM CoffeeBeans c WHERE c.van.id = :vanId", CoffeeProduct.class);
-            query.setParameter("vanId", vanId);
-            return query.list();
-        });
+        List<CoffeeProduct> finalCoffees = new ArrayList<>();
+
+        for (Class<? extends CoffeeProduct> coffeeClass : coffeeClasses){
+            finalCoffees.addAll(Objects.requireNonNull(DBOperations.executeQuery(session -> {
+                Query<? extends CoffeeProduct> query = session.createQuery(
+                        "SELECT c FROM " + coffeeClass.getSimpleName() + " c WHERE c.van.id = :vanId ", coffeeClass);
+                query.setParameter("vanId", vanId);
+                return query.list();
+            })));
+        }
+
+
+        return finalCoffees;
+
     }
 
     @Override
     public List<CoffeeProduct> getAllCoffeeByVanId() {
-        return DBOperations.executeQuery(session -> {
-            Query<CoffeeProduct> query = session.createQuery(
-                    "SELECT c FROM GroundCoffee c WHERE c.van.id IS NULL " +
-                            "UNION " +
-                            "SELECT c FROM InstantCoffee c WHERE c.van.id IS NULL " +
-                            "UNION " +
-                            "SELECT c FROM CoffeeBeans c WHERE c.van.id IS NULL", CoffeeProduct.class);
-            return query.list();
-        });
+        List<CoffeeProduct> finalCoffees = new ArrayList<>();
+
+        for (Class<? extends CoffeeProduct> coffeeClass : coffeeClasses){
+            finalCoffees.addAll(Objects.requireNonNull(DBOperations.executeQuery(session -> {
+                Query<? extends CoffeeProduct> query = session.createQuery(
+                        "SELECT c FROM " + coffeeClass.getSimpleName() + " c WHERE c.van.id IS NULL ", coffeeClass);
+                return query.list();
+            })));
+        }
+
+
+        return finalCoffees;
     }
 
     @Override
     public CoffeeVan getCoffeeVanByName(String name) {
-
         return DBOperations.executeQuery(session -> {
             Query<CoffeeVan> query = session.createQuery(
                     "FROM CoffeeVan WHERE name = :name ", CoffeeVan.class);
@@ -57,7 +74,7 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
             return query.getSingleResult();
         });
     }
-
+    // To change
     @Override
     public List<CoffeeProduct> getCoffeeByVanIdAndType(Long vanId, List<String> classNames) {
         return DBOperations.executeQuery(session -> {
@@ -78,19 +95,22 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
 
     @Override
     public List<CoffeeProduct> getAllCoffeeSortedByParam(Long vanId, String parameter) {
-        return DBOperations.executeQuery(session -> {
-            Query<CoffeeProduct> query = session.createQuery(
-                    "SELECT c FROM GroundCoffee c WHERE c.van.id = :vanId " +
-                            "UNION " +
-                            "SELECT c FROM InstantCoffee c WHERE c.van.id = :vanId " +
-                            "UNION " +
-                            "SELECT c FROM CoffeeBeans c WHERE c.van.id = :vanId" +
-                            "ORDER BY c." + parameter, CoffeeProduct.class);
-            query.setParameter("vanId", vanId);
-            return query.list();
-        });
+        List<CoffeeProduct> finalCoffees = new ArrayList<>();
+
+        for (Class<? extends CoffeeProduct> coffeeClass : coffeeClasses){
+            finalCoffees.addAll(Objects.requireNonNull(DBOperations.executeQuery(session -> {
+                Query<? extends CoffeeProduct> query = session.createQuery(
+                        "SELECT c FROM " + coffeeClass.getSimpleName() + " c WHERE c.van.id = :vanId "+ "ORDER BY c." + parameter, coffeeClass);
+                query.setParameter("vanId", vanId);
+                return query.list();
+            })));
+        }
+
+
+        return finalCoffees;
     }
 
+    // To change
    @Override
    public List<CoffeeProduct> getCoffeeBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames) {
        return DBOperations.executeQuery(session -> {
@@ -137,5 +157,40 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
            return query.list();
        });
    }
+
+    @Override
+    public List<List<? extends CoffeeProduct>> getListOfCoffeeByTypesAvailable() {
+        List<List<? extends CoffeeProduct>> listOfCoffeeByTypesAvailable = new ArrayList<>();
+
+        for (Class<? extends CoffeeProduct> coffeeClass : coffeeClasses){
+            List<? extends CoffeeProduct> coffeeList = DBOperations.executeQuery(session -> {
+                Query<? extends CoffeeProduct> query = session.createQuery(
+                        "SELECT c FROM " + coffeeClass.getSimpleName() + " c WHERE c.van.id IS NULL ", coffeeClass);
+
+                return query.list();
+            });
+
+            listOfCoffeeByTypesAvailable.add(coffeeList);
+        }
+
+        return listOfCoffeeByTypesAvailable;
+    }
+
+
+    @Override
+    public List<CoffeeProduct> getAllCoffeeInVanBasedOnPriceAndWeightRatio() {
+        List<CoffeeProduct> finalCoffees = new ArrayList<>();
+
+        for (Class<? extends CoffeeProduct> coffeeClass : coffeeClasses) {
+            finalCoffees.addAll(Objects.requireNonNull(DBOperations.executeQuery(session -> {
+                Query<CoffeeProduct> query = session.createQuery(
+                        "SELECT c FROM " + coffeeClass.getSimpleName() + " c WHERE c.van.id IS NULL " +
+                                "ORDER BY c.price / c.weight", CoffeeProduct.class);
+                return query.list();
+            })));
+        }
+
+        return finalCoffees;
+    }
 
 }

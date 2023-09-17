@@ -20,4 +20,7 @@ public interface CoffeeVanDAO extends Repository<CoffeeVan, Long> {
 
     List<CoffeeProduct> getCoffeeBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames);
 
+    List<List<? extends CoffeeProduct>> getListOfCoffeeByTypesAvailable();
+
+    List<CoffeeProduct> getAllCoffeeInVanBasedOnPriceAndWeightRatio();
 }

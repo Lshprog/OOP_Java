@@ -4,8 +4,8 @@ import org.example.common.filters.CoffeeFilter;
 import org.example.dao.coffee.*;
 import org.example.dao.coffeevan.CoffeeVanDAO;
 import org.example.dao.coffeevan.CoffeeVanDAOImpl;
-import org.example.entities.CoffeeProduct;
-import org.example.entities.CoffeeVan;
+import org.example.entities.*;
+import org.hibernate.cfg.Configuration;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -14,6 +14,14 @@ import java.util.Optional;
 import java.util.function.ToDoubleFunction;
 
 public class VanServiceImpl implements VanService{
+
+    private static final List<Class<? extends CoffeeProduct>> coffeeClasses = new ArrayList<>();
+
+    static {
+        coffeeClasses.add(GroundCoffee.class);
+        coffeeClasses.add(InstantCoffee.class);
+        coffeeClasses.add(CoffeeBeans.class);
+    }
 
     private final static CoffeeVanDAO daoCoffeeVan = new CoffeeVanDAOImpl();
 
@@ -73,14 +81,7 @@ public class VanServiceImpl implements VanService{
 
     @Override
     public List<CoffeeProduct> getAllCoffeeInVanBasedOnPriceAndWeightRatio(Long vanId) {
-
-        List<CoffeeProduct> coffeeProductList = daoCoffeeVan.getAllCoffeeByVanId(vanId);
-
-        Comparator<CoffeeProduct> ratioComparator = Comparator.comparingDouble(coffee -> coffee.getPrice() / coffee.getWeight());
-
-        coffeeProductList.sort(ratioComparator.reversed());
-
-        return coffeeProductList;
+        return daoCoffeeVan.getAllCoffeeInVanBasedOnPriceAndWeightRatio();
     }
 
     @Override
@@ -103,9 +104,7 @@ public class VanServiceImpl implements VanService{
 
         List<List<? extends CoffeeProduct>> listOfCoffeeByTypesAvailable = new ArrayList<>();
 
-        listOfCoffeeByTypesAvailable.add(daoCoffeeBeans.getAllByVanIdAndOrderedByPrice(van.getId()));
-        listOfCoffeeByTypesAvailable.add(daoGroundCoffee.getAllByVanIdAndOrderedByPrice(van.getId()));
-        listOfCoffeeByTypesAvailable.add(daoInstantCoffee.getAllByVanIdAndOrderedByPrice(van.getId()));
+        listOfCoffeeByTypesAvailable = daoCoffeeVan.getListOfCoffeeByTypesAvailable();
 
         int maxSize = 0;
         int curSum = 0;
@@ -142,7 +141,7 @@ public class VanServiceImpl implements VanService{
     @Override
     public CoffeeVan loadCoffeeProductsByIdToVan(Long vanId, List<Long> idsOfProducts) {
 
-        List<CoffeeProduct> coffeeProductList = daoCoffeeVan.getAllCoffeeByVanId(null);
+        List<CoffeeProduct> coffeeProductList = daoCoffeeVan.getAllCoffeeByVanId();
         Optional<CoffeeVan> vanOpt = daoCoffeeVan.findById(vanId);
         CoffeeVan van = new CoffeeVan();
         if(vanOpt.isPresent()){

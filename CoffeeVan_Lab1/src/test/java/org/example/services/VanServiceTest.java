@@ -41,7 +41,7 @@ class VanServiceTest {
         List<CoffeeProduct> coffees = vanService.getAllCoffeeAvailableToBeAddedToVan();
 
         for (CoffeeProduct coffeeProduct : coffees){
-            coffeeProduct.toString();
+            System.out.println(coffeeProduct.toString());
         }
 
     }

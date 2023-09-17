@@ -38,5 +38,18 @@ public class CoffeeBeans extends CoffeeProduct implements Serializable {
         return new CoffeeBeans(this);
     }
 
-
+    @Override
+    public String toString() {
+        return "CoffeeBeans{" +
+                "id=" + id +
+                ", price=" + price +
+                ", volume=" + volume +
+                ", weight=" + weight +
+                ", density=" + density +
+                ", roastLevel=" + roastLevel.toString() +
+                ", sort=" + sort +
+                ", pack=" + pack +
+                ", van=" + van +
+                '}';
+    }
 }
