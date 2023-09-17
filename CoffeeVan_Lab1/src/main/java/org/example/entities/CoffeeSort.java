@@ -14,8 +14,8 @@ public class CoffeeSort implements Serializable {
     private Long id;
 
     private String name;
-    protected double price_per_kg;
-    protected String origin_country;
+    private double price_per_kg;
+    private String origin_country;
 
     // Constructors
 

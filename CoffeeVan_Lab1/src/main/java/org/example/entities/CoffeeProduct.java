@@ -39,6 +39,12 @@ public abstract class CoffeeProduct {
     public CoffeeProduct(CoffeeSort sort, Pack pack) {
         this.sort = sort;
         this.pack = pack;
+
+        this.price = this.pack.getPrice() + this.pack.getVolume()*this.sort.getPrice_per_kg();
+        this.volume = this.pack.getVolume();
+        this.weight = 0.49*this.volume;
+        this.roastLevel = "Light";
+
     }
 
     public CoffeeProduct(CoffeeSort sort, Pack pack, CoffeeVan van) {

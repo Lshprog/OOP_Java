@@ -12,6 +12,8 @@ public interface Repository<T, ID> {
 
     void delete(T entity);
 
+    void update(T entity);
+
     boolean existsById(ID primaryKey);
 
 }

@@ -1,6 +1,6 @@
 package org.example.common.filters;
 
-import org.example.common.filters.enums.Condition;
+import org.example.common.enums.Condition;
 
 import java.util.List;
 

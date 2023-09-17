@@ -1,11 +1,10 @@
 package org.example.common.filters;
 
-import org.example.common.filters.enums.Condition;
+import org.example.common.enums.Condition;
 import org.example.entities.CoffeeProduct;
 import org.example.entities.GroundCoffee;
 import org.example.entities.InstantCoffee;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 // Need to improve class to handle multiple variations of flavor, grindType, etc.

@@ -39,6 +39,11 @@ public class RepositoryImpl<T, ID> implements Repository<T, ID>{
     }
 
     @Override
+    public void update(T entity) {
+        DBOperations.executeTransaction(session -> session.merge(entity));
+    }
+
+    @Override
     public boolean existsById(ID primaryKey) {
         return findById(primaryKey).isPresent();
     }

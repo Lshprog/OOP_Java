@@ -1,4 +1,4 @@
-package org.example.common.filters.enums;
+package org.example.common.enums;
 
 public enum Condition {
 

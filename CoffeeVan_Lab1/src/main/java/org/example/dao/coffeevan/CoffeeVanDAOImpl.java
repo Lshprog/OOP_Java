@@ -3,14 +3,12 @@ package org.example.dao.coffeevan;
 import org.example.common.filters.CoffeeFilter;
 import org.example.common.dboper.DBOperations;
 import org.example.common.filters.FilterNode;
-import org.example.common.filters.enums.Condition;
 import org.example.dao.RepositoryImpl;
 import org.example.entities.CoffeeProduct;
 import org.example.entities.CoffeeVan;
 import org.hibernate.query.Query;
 
 import java.util.List;
-import java.util.Map;
 
 public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements CoffeeVanDAO {
 

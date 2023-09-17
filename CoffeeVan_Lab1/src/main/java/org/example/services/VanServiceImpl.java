@@ -88,7 +88,6 @@ public class VanServiceImpl implements VanService{
         return daoCoffeeVan.getAllCoffeeByVanId(vanId);
     }
 
-    // Probably need to change names of functions to make code more consistent
     @Override
     public List<CoffeeProduct> getAllCoffeeInVanSortedByParameter(Long vanId, String parameter) {
         return daoCoffeeVan.getAllCoffeeSortedByParam(vanId, parameter);
