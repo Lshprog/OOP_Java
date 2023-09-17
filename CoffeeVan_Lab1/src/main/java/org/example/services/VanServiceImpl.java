@@ -67,7 +67,7 @@ public class VanServiceImpl implements VanService{
 
     @Override
     public List<CoffeeProduct> getAllCoffeeAvailableToBeAddedToVan() {
-        return daoCoffeeVan.getAllCoffeeByVanId(null);
+        return daoCoffeeVan.getAllCoffeeByVanId();
     }
 
 

@@ -9,6 +9,8 @@ public interface CoffeeProductDAO<T extends CoffeeProduct> extends Repository<T,
 
     List<T> getAllByVanId(long van_id);
 
+    List<T> getAllByVanId();
+
     List<T> getAllByVanIdAndOrderedByPrice(long van_id);
 }
 

@@ -35,6 +35,19 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
     }
 
     @Override
+    public List<CoffeeProduct> getAllCoffeeByVanId() {
+        return DBOperations.executeQuery(session -> {
+            Query<CoffeeProduct> query = session.createQuery(
+                    "SELECT c FROM GroundCoffee c WHERE c.van.id IS NULL " +
+                            "UNION " +
+                            "SELECT c FROM InstantCoffee c WHERE c.van.id IS NULL " +
+                            "UNION " +
+                            "SELECT c FROM CoffeeBeans c WHERE c.van.id IS NULL", CoffeeProduct.class);
+            return query.list();
+        });
+    }
+
+    @Override
     public CoffeeVan getCoffeeVanByName(String name) {
 
         return DBOperations.executeQuery(session -> {

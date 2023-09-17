@@ -23,6 +23,14 @@ public class CoffeeProductDAOImpl<T extends CoffeeProduct> extends RepositoryImp
     }
 
     @Override
+    public List<T> getAllByVanId() {
+        return DBOperations.executeQuery(session -> session.createQuery(
+                        "FROM " + entityClass.getSimpleName() + " c WHERE c.van.id IS NULL",
+                        entityClass)
+                .list());
+    }
+
+    @Override
     public List<T> getAllByVanIdAndOrderedByPrice(long van_id) {
         return DBOperations.executeQuery(session -> session.createQuery(
                         "FROM " + entityClass.getSimpleName() + " c WHERE c.van.id = :van_id ORDER BY c.price",

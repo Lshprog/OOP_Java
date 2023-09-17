@@ -18,11 +18,10 @@ class CoffeeVanDAOTest {
     @Test
     void testSaveCoffeeVan() {
 
-        CoffeeVan coffeeVan = new CoffeeVan("name1",18.1,23.0);
+        CoffeeVan coffeeVan = new CoffeeVan("van1_test",18.1,23.0);
 
         coffeeVanDAO.save(coffeeVan);
 
-        CoffeeVan coffeeVan1 = coffeeVanDAO.getCoffeeVanByName("name1");
 
     }
 

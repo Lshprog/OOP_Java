@@ -10,6 +10,8 @@ import java.util.List;
 public interface CoffeeVanDAO extends Repository<CoffeeVan, Long> {
     List<CoffeeProduct> getAllCoffeeByVanId(Long vanId);
 
+    List<CoffeeProduct> getAllCoffeeByVanId();
+
     CoffeeVan getCoffeeVanByName(String name);
 
     List<CoffeeProduct> getCoffeeByVanIdAndType(Long vanId, List<String> classNames);

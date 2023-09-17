@@ -59,30 +59,30 @@ public class CoffeeFilter {
         if (maxWeight != null && coffee.getWeight() > maxWeight) {
             return false;
         }
-        if(roastLevel != null && !roastLevel.contains(coffee.getRoastLevel())){
+        if(roastLevel != null && !roastLevel.contains(coffee.getRoastLevel().name())){
             return false;
         }
         if (dissolvability != null && coffee instanceof InstantCoffee) {
             InstantCoffee instantCoffee = (InstantCoffee) coffee;
-            if(!dissolvability.contains(instantCoffee.getDissolvability())){
+            if(!dissolvability.contains(instantCoffee.getDissolvability().name())){
                 return false;
             }
         }
         if (flavor != null && coffee instanceof InstantCoffee) {
             InstantCoffee instantCoffee = (InstantCoffee) coffee;
-            if(!flavor.contains(instantCoffee.getFlavor())){
+            if(!flavor.contains(instantCoffee.getFlavor().name())){
                 return false;
             }
         }
         if (grindType != null && coffee instanceof GroundCoffee) {
             GroundCoffee groundCoffee = (GroundCoffee) coffee;
-            if(!grindType.contains(groundCoffee.getGrindType())){
+            if(!grindType.contains(groundCoffee.getGrindType().name())){
                 return false;
             }
         }
         if (intensity != null && coffee instanceof GroundCoffee) {
             GroundCoffee groundCoffee = (GroundCoffee) coffee;
-            if(!intensity.contains(groundCoffee.getIntensity())){
+            if(!intensity.contains(groundCoffee.getIntensity().name())){
                 return false;
             }
         }

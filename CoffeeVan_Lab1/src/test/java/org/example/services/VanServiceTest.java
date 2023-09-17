@@ -1,7 +1,10 @@
 package org.example.services;
 
+import org.example.entities.CoffeeProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,8 +15,6 @@ class VanServiceTest {
 
     @BeforeEach
     void setUp() {
-
-
 
     }
 
@@ -36,6 +37,13 @@ class VanServiceTest {
 
     @Test
     void getAllCoffeeInVan() {
+
+        List<CoffeeProduct> coffees = vanService.getAllCoffeeAvailableToBeAddedToVan();
+
+        for (CoffeeProduct coffeeProduct : coffees){
+            coffeeProduct.toString();
+        }
+
     }
 
     @Test

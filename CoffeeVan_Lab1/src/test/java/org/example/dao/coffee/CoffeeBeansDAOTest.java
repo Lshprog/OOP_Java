@@ -2,6 +2,7 @@ package org.example.dao.coffee;
 
 import org.example.common.CoffeeProductFactory;
 import org.example.common.enums.CoffeeState;
+import org.example.common.enums.RoastLevel;
 import org.example.dao.coffeesort.CoffeeSortDAO;
 import org.example.dao.coffeesort.CoffeeSortDAOImpl;
 import org.example.dao.pack.PackDAO;
@@ -28,10 +29,19 @@ class CoffeeBeansDAOTest {
     @Test
     void testToSaveCoffeeBeansObj(){
 
-        /*CoffeeBeans coffeeBeans = new CoffeeBeans(daoCoffeeSort.findById(1L).get(), daoPack.findById(1L).get());
-        daoCoffeeBeans.save(coffeeBeans);*/
+        /*CoffeeBeans coffeeBeans1 = (CoffeeBeans) CoffeeProductFactory.createCoffeeProduct(CoffeeState.BEANS,daoCoffeeSort.findById(3L).get(),
+                                                                                    daoPack.findById(11L).get());
+        coffeeBeans1.setRoastLevel(RoastLevel.MEDIUM);
 
-        //CoffeeBeans coffeeBeans1 = CoffeeProductFactory.createCoffeeProduct(CoffeeState.BEANS,daoCoffeeSort.findById());
+        CoffeeBeans coffeeBeans2 = (CoffeeBeans) coffeeBeans1.clone();
+        CoffeeBeans coffeeBeans3 = (CoffeeBeans) coffeeBeans1.clone();
+        CoffeeBeans coffeeBeans4= (CoffeeBeans) coffeeBeans1.clone();
+        CoffeeBeans coffeeBeans5 = (CoffeeBeans) coffeeBeans1.clone();
+
+        daoCoffeeBeans.save(coffeeBeans2);
+        daoCoffeeBeans.save(coffeeBeans3);
+        daoCoffeeBeans.save(coffeeBeans4);
+        daoCoffeeBeans.save(coffeeBeans5);*/
 
 
 
