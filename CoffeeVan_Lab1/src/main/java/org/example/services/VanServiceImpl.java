@@ -1,6 +1,6 @@
 package org.example.services;
 
-import org.example.common.CoffeeFilter;
+import org.example.common.filters.CoffeeFilter;
 import org.example.dao.coffee.*;
 import org.example.dao.coffeevan.CoffeeVanDAO;
 import org.example.dao.coffeevan.CoffeeVanDAOImpl;

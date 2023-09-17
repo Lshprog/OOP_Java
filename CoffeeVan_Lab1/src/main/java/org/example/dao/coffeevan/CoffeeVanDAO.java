@@ -1,6 +1,6 @@
 package org.example.dao.coffeevan;
 
-import org.example.common.CoffeeFilter;
+import org.example.common.filters.CoffeeFilter;
 import org.example.dao.Repository;
 import org.example.entities.CoffeeProduct;
 import org.example.entities.CoffeeVan;

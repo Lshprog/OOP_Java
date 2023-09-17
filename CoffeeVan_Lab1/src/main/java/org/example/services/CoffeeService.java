@@ -8,5 +8,11 @@ public interface CoffeeService {
 
     List<CoffeeProduct> getAllCoffee();
 
+    void save(CoffeeProduct coffeeProduct);
+
+    void delete(CoffeeProduct coffeeProduct);
+
+
+
 
 }

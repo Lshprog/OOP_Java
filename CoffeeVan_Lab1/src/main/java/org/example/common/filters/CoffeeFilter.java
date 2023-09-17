@@ -1,11 +1,12 @@
-package org.example.common;
+package org.example.common.filters;
 
+import org.example.common.filters.enums.Condition;
 import org.example.entities.CoffeeProduct;
 import org.example.entities.GroundCoffee;
 import org.example.entities.InstantCoffee;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 
 // Need to improve class to handle multiple variations of flavor, grindType, etc.
 // Need to use Builder pattern
@@ -17,15 +18,15 @@ public class CoffeeFilter {
     private Double maxVolume;
     private Double minWeight;
     private Double maxWeight;
-    private String roastLevel;
+    private List<String> roastLevel;
 
     // Attributes specific to InstantCoffee
-    private String dissolvability;
-    private String flavor;
+    private List<String> dissolvability;
+    private List<String> flavor;
 
     // Attributes specific to GroundCoffee
-    private String grindType;
-    private String intensity;
+    private List<String> grindType;
+    private List<String> intensity;
 
 
     public List<CoffeeProduct> filterCoffee(List<CoffeeProduct> coffeeProductList) {
@@ -59,35 +60,77 @@ public class CoffeeFilter {
         if (maxWeight != null && coffee.getWeight() > maxWeight) {
             return false;
         }
-        if (roastLevel != null && !coffee.getRoastLevel().equalsIgnoreCase(roastLevel)) {
+        if(roastLevel != null && !roastLevel.contains(coffee.getRoastLevel())){
             return false;
         }
         if (dissolvability != null && coffee instanceof InstantCoffee) {
             InstantCoffee instantCoffee = (InstantCoffee) coffee;
-            if (!instantCoffee.getDissolvability().equalsIgnoreCase(dissolvability)) {
+            if(!dissolvability.contains(instantCoffee.getDissolvability())){
                 return false;
             }
         }
         if (flavor != null && coffee instanceof InstantCoffee) {
             InstantCoffee instantCoffee = (InstantCoffee) coffee;
-            if (!instantCoffee.getFlavor().equalsIgnoreCase(flavor)) {
+            if(!flavor.contains(instantCoffee.getFlavor())){
                 return false;
             }
         }
         if (grindType != null && coffee instanceof GroundCoffee) {
             GroundCoffee groundCoffee = (GroundCoffee) coffee;
-            if (!groundCoffee.getGrindType().equalsIgnoreCase(grindType)) {
+            if(!grindType.contains(groundCoffee.getGrindType())){
                 return false;
             }
         }
         if (intensity != null && coffee instanceof GroundCoffee) {
             GroundCoffee groundCoffee = (GroundCoffee) coffee;
-            if (!groundCoffee.getIntensity().equalsIgnoreCase(intensity)) {
+            if(!intensity.contains(groundCoffee.getIntensity())){
                 return false;
             }
         }
 
         return true;
+    }
+
+    public List<FilterNode> getFilterRanges() {
+
+        List<FilterNode> criteriaList = new ArrayList<>();
+
+        if (maxPrice != null) {
+            criteriaList.add(new FilterNode("price", "maxPrice", Collections.singletonList(String.valueOf(maxPrice)), Condition.MAX));
+        }
+        if (minPrice != null) {
+            criteriaList.add(new FilterNode("price", "minPrice", Collections.singletonList(String.valueOf(minPrice)), Condition.MIN));
+        }
+        if (minVolume != null) {
+            criteriaList.add(new FilterNode("volume", "minVolume", Collections.singletonList(String.valueOf(minVolume)), Condition.MIN));
+        }
+        if (maxVolume != null) {
+            criteriaList.add(new FilterNode("volume", "maxVolume", Collections.singletonList(String.valueOf(maxVolume)), Condition.MAX));
+        }
+        if (minWeight != null) {
+            criteriaList.add(new FilterNode("weight", "minWeight", Collections.singletonList(String.valueOf(minWeight)), Condition.MIN));
+
+        }
+        if (maxWeight != null) {
+            criteriaList.add(new FilterNode("weight", "maxWeight", Collections.singletonList(String.valueOf(maxWeight)), Condition.MAX));
+        }
+        if (roastLevel != null) {
+            criteriaList.add(new FilterNode("roastLevel", "roastLevel", roastLevel, Condition.LIST));
+        }
+        if (dissolvability != null) {
+            criteriaList.add(new FilterNode("dissolvability", "dissolvability", dissolvability, Condition.LIST));
+        }
+        if (flavor != null) {
+            criteriaList.add(new FilterNode("flavor", "flavor", flavor, Condition.LIST));
+        }
+        if (grindType != null) {
+            criteriaList.add(new FilterNode("grindType", "grindType", grindType, Condition.LIST));
+        }
+        if (intensity != null) {
+            criteriaList.add(new FilterNode("intensity", "intensity", intensity, Condition.LIST));
+        }
+
+        return criteriaList;
     }
 
 
@@ -139,43 +182,43 @@ public class CoffeeFilter {
         this.maxWeight = maxWeight;
     }
 
-    public String getRoastLevel() {
+    public List<String> getRoastLevel() {
         return roastLevel;
     }
 
-    public void setRoastLevel(String roastLevel) {
+    public void setRoastLevel(List<String> roastLevel) {
         this.roastLevel = roastLevel;
     }
 
-    public String getDissolvability() {
+    public List<String> getDissolvability() {
         return dissolvability;
     }
 
-    public void setDissolvability(String dissolvability) {
+    public void setDissolvability(List<String> dissolvability) {
         this.dissolvability = dissolvability;
     }
 
-    public String getFlavor() {
+    public List<String> getFlavor() {
         return flavor;
     }
 
-    public void setFlavor(String flavor) {
+    public void setFlavor(List<String> flavor) {
         this.flavor = flavor;
     }
 
-    public String getGrindType() {
+    public List<String> getGrindType() {
         return grindType;
     }
 
-    public void setGrindType(String grindType) {
+    public void setGrindType(List<String> grindType) {
         this.grindType = grindType;
     }
 
-    public String getIntensity() {
+    public List<String> getIntensity() {
         return intensity;
     }
 
-    public void setIntensity(String intensity) {
+    public void setIntensity(List<String> intensity) {
         this.intensity = intensity;
     }
 }
