@@ -14,7 +14,7 @@ public interface CoffeeVanDAO extends Repository<CoffeeVan, Long> {
 
     CoffeeVan getCoffeeVanByName(String name);
 
-    List<CoffeeProduct> getCoffeeByVanIdAndType(Long vanId, List<String> classNames);
+ /*   List<CoffeeProduct> getCoffeeByVanIdAndType(Long vanId, List<String> classNames);*/
 
     List<CoffeeProduct> getAllCoffeeSortedByParam(Long vanId, String parameter);
 

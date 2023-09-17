@@ -25,9 +25,11 @@ public interface VanService {
 
     List<CoffeeProduct> getCoffeeInVanBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames);
 
+    CoffeeVan getCoffeeVanById(Long vanId);
+
     // Load functions : load the particular van with products based on something
 
-    CoffeeVan loadCoffeeVanAutomaticallyBasedOnBudget(CoffeeVan van, Long budget);
+    CoffeeVan loadCoffeeVanAutomaticallyBasedOnBudget(CoffeeVan van, double budget);
 
     CoffeeVan loadCoffeeProductsByIdToVan(Long vanId, List<Long> idsOfProducts);
 

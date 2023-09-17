@@ -5,7 +5,6 @@ import org.example.dao.coffee.*;
 import org.example.dao.coffeevan.CoffeeVanDAO;
 import org.example.dao.coffeevan.CoffeeVanDAOImpl;
 import org.example.entities.*;
-import org.hibernate.cfg.Configuration;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -14,14 +13,6 @@ import java.util.Optional;
 import java.util.function.ToDoubleFunction;
 
 public class VanServiceImpl implements VanService{
-
-    private static final List<Class<? extends CoffeeProduct>> coffeeClasses = new ArrayList<>();
-
-    static {
-        coffeeClasses.add(GroundCoffee.class);
-        coffeeClasses.add(InstantCoffee.class);
-        coffeeClasses.add(CoffeeBeans.class);
-    }
 
     private final static CoffeeVanDAO daoCoffeeVan = new CoffeeVanDAOImpl();
 
@@ -100,7 +91,13 @@ public class VanServiceImpl implements VanService{
     }
 
     @Override
-    public CoffeeVan loadCoffeeVanAutomaticallyBasedOnBudget(CoffeeVan van, Long budget) {
+    public CoffeeVan getCoffeeVanById(Long vanId) {
+        return daoCoffeeVan.findById(vanId).get();
+    }
+
+
+    @Override
+    public CoffeeVan loadCoffeeVanAutomaticallyBasedOnBudget(CoffeeVan van, double budget) {
 
         List<List<? extends CoffeeProduct>> listOfCoffeeByTypesAvailable = new ArrayList<>();
 
@@ -118,16 +115,18 @@ public class VanServiceImpl implements VanService{
         }
         while (curInListPos < maxSize) {
             curList = curList % 3;
-            CoffeeProduct coffee = listOfCoffeeByTypesAvailable.get(curList).get(curInListPos);
-            if(coffee != null
-                    && coffee.getPrice() + curSum < budget
-                    && coffee.getWeight() + van.getCur_weight() < van.getMax_weight()
-                    && coffee.getVolume() + van.getCur_volume() < van.getMax_volume()
-            ){
-                coffee.setVan(van);
-                van.setCur_weight(van.getCur_weight() + coffee.getWeight());
-                van.setCur_volume(van.getCur_volume() + coffee.getVolume());
-                curSum += coffee.getPrice();
+            if(listOfCoffeeByTypesAvailable.get(curList).size() > curInListPos) {
+                CoffeeProduct coffee = listOfCoffeeByTypesAvailable.get(curList).get(curInListPos);
+                if (coffee != null
+                        && coffee.getPrice() + curSum < budget
+                        && coffee.getWeight() + van.getCur_weight() < van.getMax_weight()
+                        && coffee.getVolume() + van.getCur_volume() < van.getMax_volume()
+                ) {
+                    coffee.setVan(van);
+                    van.setCur_weight(van.getCur_weight() + coffee.getWeight());
+                    van.setCur_volume(van.getCur_volume() + coffee.getVolume());
+                    curSum += coffee.getPrice();
+                }
             }
             curList++;
             if(curList == 3){

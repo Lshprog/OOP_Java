@@ -101,4 +101,17 @@ public class CoffeeVan implements Serializable {
     public void setCur_weight(double cur_weight) {
         this.cur_weight = cur_weight;
     }
+
+
+    @Override
+    public String toString() {
+        return "CoffeeVan{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", max_volume=" + max_volume +
+                ", cur_volume=" + cur_volume +
+                ", max_weight=" + max_weight +
+                ", cur_weight=" + cur_weight +
+                '}';
+    }
 }

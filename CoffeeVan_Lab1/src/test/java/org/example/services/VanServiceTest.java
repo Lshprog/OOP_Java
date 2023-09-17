@@ -1,6 +1,7 @@
 package org.example.services;
 
 import org.example.entities.CoffeeProduct;
+import org.example.entities.CoffeeVan;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -56,6 +57,11 @@ class VanServiceTest {
 
     @Test
     void loadCoffeeVanAutomaticallyBasedOnBudget() {
+
+        CoffeeVan van = vanService.loadCoffeeVanAutomaticallyBasedOnBudget(vanService.getCoffeeVanById(2L),30.0);
+
+        System.out.println(van.toString());
+
     }
 
     @Test

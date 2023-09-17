@@ -74,24 +74,6 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
             return query.getSingleResult();
         });
     }
-    // To change
-    @Override
-    public List<CoffeeProduct> getCoffeeByVanIdAndType(Long vanId, List<String> classNames) {
-        return DBOperations.executeQuery(session -> {
-            StringBuilder hql = new StringBuilder("SELECT c FROM ");
-
-            for (String className : classNames) {
-                hql.append(className).append(" c");
-
-                if (classNames.indexOf(className) < classNames.size() - 1) {
-                    hql.append(" UNION ");
-                }
-            }
-
-            Query<CoffeeProduct> query = session.createQuery(hql.toString(), CoffeeProduct.class);
-            return query.list();
-        });
-    }
 
     @Override
     public List<CoffeeProduct> getAllCoffeeSortedByParam(Long vanId, String parameter) {
@@ -110,15 +92,16 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
         return finalCoffees;
     }
 
-    // To change
    @Override
    public List<CoffeeProduct> getCoffeeBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames) {
-       return DBOperations.executeQuery(session -> {
-           StringBuilder hql = new StringBuilder("SELECT c FROM ");
 
-           List<FilterNode> criteriaList = filter.getFilterRanges();
+       List<CoffeeProduct> finalCoffees = new ArrayList<>();
 
-           for(String className : classNames){
+       for(String className : classNames) {
+           finalCoffees.addAll(Objects.requireNonNull(DBOperations.executeQuery(session -> {
+               StringBuilder hql = new StringBuilder("SELECT c FROM ");
+
+               List<FilterNode> criteriaList = filter.getFilterRanges();
 
                hql.append(className).append(" c WHERE c.van.id = :vanId");
 
@@ -140,22 +123,20 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
                    }
                });
 
-               if(classNames.indexOf(className) != classNames.size() - 1){
-                   hql.append(" UNION ");
-               }
 
-           }
+               Query<CoffeeProduct> query = session.createQuery(hql.toString(), CoffeeProduct.class);
 
-           Query<CoffeeProduct> query = session.createQuery(hql.toString(), CoffeeProduct.class);
+               criteriaList.forEach((criteria) -> {
+                   query.setParameter(criteria.getAttrFilter(), criteria.getValues());
+               });
 
-           criteriaList.forEach((criteria) -> {
-               query.setParameter(criteria.getAttrFilter(), criteria.getValues());
-           });
+               query.setParameter("vanId", vanId);
 
-           query.setParameter("vanId", vanId);
+               return query.list();
+           })));
+       }
 
-           return query.list();
-       });
+       return finalCoffees;
    }
 
     @Override
