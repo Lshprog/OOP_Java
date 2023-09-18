@@ -64,7 +64,8 @@ class CoffeeVanDAOTest {
 
         List<String> classNames = new ArrayList<>();
         classNames.add("InstantCoffee");
-
+        classNames.add("GroundCoffee");
+        classNames.add("CoffeeBeans");
 
         List<CoffeeProduct> coffeeProducts = coffeeVanDAO.getCoffeeBasedOnParameters(coffeeVan.getId(),coffeeFilter,classNames);
 

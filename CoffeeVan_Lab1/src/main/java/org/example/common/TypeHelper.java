@@ -5,7 +5,7 @@ import org.example.common.enums.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TypeConverter {
+public class TypeHelper {
 
     public static Object convertToList(List<String> inputList, String datatype) {
 
@@ -23,7 +23,6 @@ public class TypeConverter {
                 }
 
                 return roastLevels;
-
 
             }
 
@@ -75,4 +74,32 @@ public class TypeConverter {
 
 
     }
+
+    public static boolean validateCombinationClasses(String enumstr, String classname) {
+
+        if(enumstr == "RoastLevel"){
+            return true;
+        }
+        else if(enumstr == "Flavor" || enumstr == "Dissolvability"){
+            if(classname == "InstantCoffee"){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else if(enumstr == "GrindType" || enumstr == "Intensity"){
+            if(classname == "GroundCoffee"){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
+
+    }
+
 }

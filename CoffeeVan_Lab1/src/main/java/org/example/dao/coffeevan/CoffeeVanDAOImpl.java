@@ -1,6 +1,7 @@
 package org.example.dao.coffeevan;
 
-import org.example.common.TypeConverter;
+import org.example.common.TypeHelper;
+import org.example.common.enums.Condition;
 import org.example.common.filters.CoffeeFilter;
 import org.example.common.dboper.DBOperations;
 import org.example.common.filters.FilterNode;
@@ -117,9 +118,9 @@ public class CoffeeVanDAOImpl extends ExtraRepos<CoffeeVan> implements CoffeeVan
                            hql.append(" AND c.").append(criteria.getAttrEntity()).append(" >= :").append(criteria.getAttrFilter());
                        }
                        case LIST -> {
-                           /*if()*/
-                           hql.append(" AND (c.").append(criteria.getAttrEntity()).append(" IN (:").append(criteria.getAttrFilter()).append(")");
-                                   /*.append("OR (type(c) =").append(className).append("))");*/
+                           if(TypeHelper.validateCombinationClasses(criteria.getDatatype(),className)){
+                               hql.append(" AND c.").append(criteria.getAttrEntity()).append(" IN (:").append(criteria.getAttrFilter()).append(")");
+                           }
                        }
                    }
                });
@@ -128,8 +129,9 @@ public class CoffeeVanDAOImpl extends ExtraRepos<CoffeeVan> implements CoffeeVan
                Query<CoffeeProduct> query = session.createQuery(hql.toString(), CoffeeProduct.class);
 
                criteriaList.forEach((criteria) -> {
-                   query.setParameter(criteria.getAttrFilter() , TypeConverter.convertToList(criteria.getValues(), criteria.getDatatype()));
-
+                   if(TypeHelper.validateCombinationClasses(criteria.getDatatype(),className)){
+                       query.setParameter(criteria.getAttrFilter(), TypeHelper.convertToList(criteria.getValues(), criteria.getDatatype()));
+                   }
                });
 
                query.setParameter("vanId", vanId);
