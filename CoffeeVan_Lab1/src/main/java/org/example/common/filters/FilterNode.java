@@ -9,12 +9,15 @@ public class FilterNode {
     String attrFilter;
     List<String> values;
     Condition condition;
+    String datatype;
 
-    public FilterNode(String attrEntity, String attrFilter, List<String> values, Condition condition) {
+
+    public FilterNode(String attrEntity, String attrFilter, List<String> values, Condition condition, String datatype) {
         this.attrEntity = attrEntity;
         this.attrFilter = attrFilter;
         this.values = values;
         this.condition = condition;
+        this.datatype = datatype;
     }
 
     public FilterNode() {
@@ -50,5 +53,17 @@ public class FilterNode {
 
     public void setCondition(Condition condition) {
         this.condition = condition;
+    }
+
+    public String getDatatype() {
+        return datatype;
+    }
+
+    public void setDatatype(String datatype) {
+        this.datatype = datatype;
+    }
+
+    public String getFirst(){
+        return this.values.get(0);
     }
 }

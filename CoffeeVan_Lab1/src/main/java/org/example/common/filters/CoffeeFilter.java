@@ -95,38 +95,38 @@ public class CoffeeFilter {
         List<FilterNode> criteriaList = new ArrayList<>();
 
         if (maxPrice != null) {
-            criteriaList.add(new FilterNode("price", "maxPrice", Collections.singletonList(String.valueOf(maxPrice)), Condition.MAX));
+            criteriaList.add(new FilterNode("price", "maxPrice", Collections.singletonList(String.valueOf(maxPrice)), Condition.MAX, "Double"));
         }
         if (minPrice != null) {
-            criteriaList.add(new FilterNode("price", "minPrice", Collections.singletonList(String.valueOf(minPrice)), Condition.MIN));
+            criteriaList.add(new FilterNode("price", "minPrice", Collections.singletonList(String.valueOf(minPrice)), Condition.MIN, "Double"));
         }
         if (minVolume != null) {
-            criteriaList.add(new FilterNode("volume", "minVolume", Collections.singletonList(String.valueOf(minVolume)), Condition.MIN));
+            criteriaList.add(new FilterNode("volume", "minVolume", Collections.singletonList(String.valueOf(minVolume)), Condition.MIN, "Double"));
         }
         if (maxVolume != null) {
-            criteriaList.add(new FilterNode("volume", "maxVolume", Collections.singletonList(String.valueOf(maxVolume)), Condition.MAX));
+            criteriaList.add(new FilterNode("volume", "maxVolume", Collections.singletonList(String.valueOf(maxVolume)), Condition.MAX, "Double"));
         }
         if (minWeight != null) {
-            criteriaList.add(new FilterNode("weight", "minWeight", Collections.singletonList(String.valueOf(minWeight)), Condition.MIN));
+            criteriaList.add(new FilterNode("weight", "minWeight", Collections.singletonList(String.valueOf(minWeight)), Condition.MIN, "Double"));
 
         }
         if (maxWeight != null) {
-            criteriaList.add(new FilterNode("weight", "maxWeight", Collections.singletonList(String.valueOf(maxWeight)), Condition.MAX));
+            criteriaList.add(new FilterNode("weight", "maxWeight", Collections.singletonList(String.valueOf(maxWeight)), Condition.MAX, "Double"));
         }
         if (roastLevel != null) {
-            criteriaList.add(new FilterNode("roastLevel", "roastLevel", roastLevel, Condition.LIST));
+            criteriaList.add(new FilterNode("roastLevel", "roastLevel", roastLevel, Condition.LIST, "RoastLevel"));
         }
         if (dissolvability != null) {
-            criteriaList.add(new FilterNode("dissolvability", "dissolvability", dissolvability, Condition.LIST));
+            criteriaList.add(new FilterNode("dissolvability", "dissolvability", dissolvability, Condition.LIST, "Dissolvability"));
         }
         if (flavor != null) {
-            criteriaList.add(new FilterNode("flavor", "flavor", flavor, Condition.LIST));
+            criteriaList.add(new FilterNode("flavor", "flavor", flavor, Condition.LIST, "Flavor"));
         }
         if (grindType != null) {
-            criteriaList.add(new FilterNode("grindType", "grindType", grindType, Condition.LIST));
+            criteriaList.add(new FilterNode("grindType", "grindType", grindType, Condition.LIST, "GrindType"));
         }
         if (intensity != null) {
-            criteriaList.add(new FilterNode("intensity", "intensity", intensity, Condition.LIST));
+            criteriaList.add(new FilterNode("intensity", "intensity", intensity, Condition.LIST, "Intensity"));
         }
 
         return criteriaList;

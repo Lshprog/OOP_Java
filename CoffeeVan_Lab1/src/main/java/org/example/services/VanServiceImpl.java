@@ -23,6 +23,11 @@ public class VanServiceImpl implements VanService{
     private final static InstantCoffeeDAO daoInstantCoffee = new InstantCoffeeDAOImpl();
 
     @Override
+    public void deleteVan(CoffeeVan coffeeVan) {
+
+    }
+
+    @Override
     public List<CoffeeProduct> sortCoffeeListBasedOnParameter(List<CoffeeProduct> coffeeList, String parameter) {
 
         Comparator<CoffeeProduct> ratioComparator = Comparator.comparingDouble(new ToDoubleFunction<CoffeeProduct>() {

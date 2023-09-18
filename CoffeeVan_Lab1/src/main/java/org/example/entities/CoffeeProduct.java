@@ -2,9 +2,11 @@ package org.example.entities;
 
 import jakarta.persistence.*;
 import org.example.common.enums.RoastLevel;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class CoffeeProduct {
 
     @Id

@@ -1,17 +1,19 @@
 package org.example.dao.coffeevan;
 
+import org.example.common.TypeConverter;
 import org.example.common.filters.CoffeeFilter;
 import org.example.common.dboper.DBOperations;
 import org.example.common.filters.FilterNode;
-import org.example.dao.RepositoryImpl;
+import org.example.dao.ExtraRepos;
 import org.example.entities.*;
 import org.hibernate.query.Query;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements CoffeeVanDAO {
+public class CoffeeVanDAOImpl extends ExtraRepos<CoffeeVan> implements CoffeeVanDAO {
 
     private final List<Class<? extends CoffeeProduct>> coffeeClasses = new ArrayList<>();
 
@@ -109,16 +111,15 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
 
                    switch (criteria.getCondition()) {
                        case MAX -> {
-                           hql.append(" AND c.").append(criteria.getAttrEntity()).append(" >= :").append(criteria.getAttrFilter());
-                       }
-                       case MIN -> {
                            hql.append(" AND c.").append(criteria.getAttrEntity()).append(" <= :").append(criteria.getAttrFilter());
                        }
-                       case EQUAL -> {
-                           hql.append(" AND c.").append(criteria.getAttrEntity()).append(" = :").append(criteria.getAttrFilter());
+                       case MIN -> {
+                           hql.append(" AND c.").append(criteria.getAttrEntity()).append(" >= :").append(criteria.getAttrFilter());
                        }
                        case LIST -> {
-                           hql.append(" AND c.").append(criteria.getAttrEntity()).append(" IN (:").append(criteria.getAttrFilter()).append(")");
+                           /*if()*/
+                           hql.append(" AND (c.").append(criteria.getAttrEntity()).append(" IN (:").append(criteria.getAttrFilter()).append(")");
+                                   /*.append("OR (type(c) =").append(className).append("))");*/
                        }
                    }
                });
@@ -127,7 +128,8 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
                Query<CoffeeProduct> query = session.createQuery(hql.toString(), CoffeeProduct.class);
 
                criteriaList.forEach((criteria) -> {
-                   query.setParameter(criteria.getAttrFilter(), criteria.getValues());
+                   query.setParameter(criteria.getAttrFilter() , TypeConverter.convertToList(criteria.getValues(), criteria.getDatatype()));
+
                });
 
                query.setParameter("vanId", vanId);
@@ -172,6 +174,16 @@ public class CoffeeVanDAOImpl extends RepositoryImpl<CoffeeVan, Long> implements
         }
 
         return finalCoffees;
+    }
+
+    @Override
+    public void delete(CoffeeVan coffeeVan) {
+
+        AbstractMap.SimpleEntry<String, Long> deletePair = new AbstractMap.SimpleEntry<>("van",coffeeVan.getId());
+
+        this.deleteCoffees(deletePair);
+
+        DBOperations.executeTransaction(session -> session.remove(coffeeVan));
     }
 
 }

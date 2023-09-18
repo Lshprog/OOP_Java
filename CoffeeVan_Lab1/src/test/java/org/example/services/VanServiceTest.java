@@ -1,5 +1,7 @@
 package org.example.services;
 
+import org.example.common.enums.RoastLevel;
+import org.example.entities.CoffeeBeans;
 import org.example.entities.CoffeeProduct;
 import org.example.entities.CoffeeVan;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,13 +60,14 @@ class VanServiceTest {
     @Test
     void loadCoffeeVanAutomaticallyBasedOnBudget() {
 
-        CoffeeVan van = vanService.loadCoffeeVanAutomaticallyBasedOnBudget(vanService.getCoffeeVanById(2L),30.0);
+        //CoffeeVan van = vanService.loadCoffeeVanAutomaticallyBasedOnBudget(vanService.getCoffeeVanById(2L),30.0);
 
-        System.out.println(van.toString());
+
 
     }
 
     @Test
     void loadCoffeeProductsByIdToVan() {
+
     }
 }

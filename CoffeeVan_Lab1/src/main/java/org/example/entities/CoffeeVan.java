@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class CoffeeVan implements Serializable {
@@ -23,6 +25,7 @@ public class CoffeeVan implements Serializable {
     private double max_weight;
 
     private double cur_weight;
+
 
 //    @OneToMany(cascade = CascadeType.ALL,
 //            mappedBy = "van")

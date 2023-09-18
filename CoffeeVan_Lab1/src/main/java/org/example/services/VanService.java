@@ -9,6 +9,8 @@ import java.util.List;
 public interface VanService {
 
 
+    void deleteVan(CoffeeVan coffeeVan);
+
     // Sorting functions : which take list of coffee as parameters
     List<CoffeeProduct> sortCoffeeListBasedOnParameter(List<CoffeeProduct> coffeeList, String parameter);
 

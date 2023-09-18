@@ -5,7 +5,9 @@ import org.example.dao.RepositoryImpl;
 import org.example.entities.CoffeeProduct;
 
 
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 
 public class CoffeeProductDAOImpl<T extends CoffeeProduct> extends RepositoryImpl<T, Long> implements CoffeeProductDAO<T> {
 
@@ -38,5 +40,20 @@ public class CoffeeProductDAOImpl<T extends CoffeeProduct> extends RepositoryImp
                 .setParameter("van_id", van_id)
                 .list());
     }
+
+    @Override
+    public void deleteSafely(AbstractMap.SimpleEntry<String, Long> deletePair) {
+
+        String key = deletePair.getKey();
+        Long id = deletePair.getValue();
+
+        DBOperations.executeQuery(session -> session.createQuery(
+                        "DELETE " + entityClass.getSimpleName() + " c WHERE c."+ key +".id = :par_id",
+                        entityClass)
+                .setParameter("par_id", id)
+                .list());
+
+    }
+
 
 }

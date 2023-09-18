@@ -32,6 +32,11 @@ class PackDAOTest {
         daoPack.update(pack3);*/
 
         //assertEquals(daoPack.findById(1L).get().getPrice(), pack.getPrice());
+
+        /*Pack pack3 = daoPack.findById(10L).get();
+
+        daoPack.delete(pack3);*/
+
     }
 
     @Test
