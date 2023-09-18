@@ -117,6 +117,9 @@ public class CoffeeVanDAOImpl extends ExtraRepos<CoffeeVan> implements CoffeeVan
                        case MIN -> {
                            hql.append(" AND c.").append(criteria.getAttrEntity()).append(" >= :").append(criteria.getAttrFilter());
                        }
+                       case EQUAL -> {
+                           hql.append(" AND c.").append(criteria.getAttrEntity()).append(" IN (:").append(criteria.getAttrFilter()).append(")");
+                       }
                        case LIST -> {
                            if(TypeHelper.validateCombinationClasses(criteria.getDatatype(),className)){
                                hql.append(" AND c.").append(criteria.getAttrEntity()).append(" IN (:").append(criteria.getAttrFilter()).append(")");

@@ -58,14 +58,18 @@ class CoffeeVanDAOTest {
 
         CoffeeFilter coffeeFilter = new CoffeeFilter();
         coffeeFilter.setMaxPrice(4.54);
+
         List<String> flavors = new ArrayList<>();
         flavors.add(Flavor.HAZELNUT.name());
         coffeeFilter.setFlavor(flavors);
+
+        coffeeFilter.setSortId(3L);
 
         List<String> classNames = new ArrayList<>();
         classNames.add("InstantCoffee");
         classNames.add("GroundCoffee");
         classNames.add("CoffeeBeans");
+
 
         List<CoffeeProduct> coffeeProducts = coffeeVanDAO.getCoffeeBasedOnParameters(coffeeVan.getId(),coffeeFilter,classNames);
 

@@ -18,6 +18,9 @@ public class CoffeeFilter {
     private Double minWeight;
     private Double maxWeight;
     private List<String> roastLevel;
+    private Long vanId;
+    private Long sortId;
+    private Long packId;
 
     // Attributes specific to InstantCoffee
     private List<String> dissolvability;
@@ -108,10 +111,18 @@ public class CoffeeFilter {
         }
         if (minWeight != null) {
             criteriaList.add(new FilterNode("weight", "minWeight", Collections.singletonList(String.valueOf(minWeight)), Condition.MIN, "Double"));
-
         }
         if (maxWeight != null) {
             criteriaList.add(new FilterNode("weight", "maxWeight", Collections.singletonList(String.valueOf(maxWeight)), Condition.MAX, "Double"));
+        }
+        if (vanId != null) {
+            criteriaList.add(new FilterNode("van.id", "vanId", Collections.singletonList(String.valueOf(vanId)), Condition.EQUAL, "Long"));
+        }
+        if (sortId != null) {
+            criteriaList.add(new FilterNode("sort.id", "sortId", Collections.singletonList(String.valueOf(sortId)), Condition.EQUAL, "Long"));
+        }
+        if (packId != null) {
+            criteriaList.add(new FilterNode("pack.id", "packId", Collections.singletonList(String.valueOf(packId)), Condition.EQUAL, "Long"));
         }
         if (roastLevel != null) {
             criteriaList.add(new FilterNode("roastLevel", "roastLevel", roastLevel, Condition.LIST, "RoastLevel"));
@@ -219,5 +230,29 @@ public class CoffeeFilter {
 
     public void setIntensity(List<String> intensity) {
         this.intensity = intensity;
+    }
+
+    public Long getVanId() {
+        return vanId;
+    }
+
+    public void setVanId(Long vanId) {
+        this.vanId = vanId;
+    }
+
+    public Long getSortId() {
+        return sortId;
+    }
+
+    public void setSortId(Long sortId) {
+        this.sortId = sortId;
+    }
+
+    public Long getPackId() {
+        return packId;
+    }
+
+    public void setPackId(Long packId) {
+        this.packId = packId;
     }
 }

@@ -14,6 +14,16 @@ public class TypeHelper {
                 return Double.parseDouble(inputList.get(0));
             }
 
+            case "Long" -> {
+                List<Long> ids = new ArrayList<>();
+
+                for (String par : inputList){
+                    ids.add(Long.parseLong(par));
+                }
+
+                return ids;
+            }
+
             case "RoastLevel" -> {
 
                 List<RoastLevel> roastLevels = new ArrayList<>();
