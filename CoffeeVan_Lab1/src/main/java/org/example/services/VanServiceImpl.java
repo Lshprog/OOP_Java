@@ -1,26 +1,19 @@
 package org.example.services;
 
 import org.example.common.filters.CoffeeFilter;
-import org.example.dao.coffee.*;
 import org.example.dao.coffeevan.CoffeeVanDAO;
 import org.example.dao.coffeevan.CoffeeVanDAOImpl;
 import org.example.entities.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.ToDoubleFunction;
 
 public class VanServiceImpl implements VanService{
 
     private final static CoffeeVanDAO daoCoffeeVan = new CoffeeVanDAOImpl();
 
-    private final static CoffeeBeansDAO daoCoffeeBeans = new CoffeeBeansDAOImpl();
+    private final static CoffeeService coffeeService = new CoffeeServiceImpl();
 
-    private final static GroundCoffeeDAO daoGroundCoffee = new GroundCoffeeDAOImpl();
-
-    private final static InstantCoffeeDAO daoInstantCoffee = new InstantCoffeeDAOImpl();
 
     @Override
     public void deleteVan(CoffeeVan coffeeVan) {
@@ -77,7 +70,7 @@ public class VanServiceImpl implements VanService{
 
     @Override
     public List<CoffeeProduct> getAllCoffeeInVanBasedOnPriceAndWeightRatio(Long vanId) {
-        return daoCoffeeVan.getAllCoffeeInVanBasedOnPriceAndWeightRatio();
+        return this.sortCoffeeListBasedOnParameter(daoCoffeeVan.getAllCoffeeByVanId(vanId),"price/weight");
     }
 
     @Override
@@ -87,7 +80,7 @@ public class VanServiceImpl implements VanService{
 
     @Override
     public List<CoffeeProduct> getAllCoffeeInVanSortedByParameter(Long vanId, String parameter) {
-        return daoCoffeeVan.getAllCoffeeSortedByParam(vanId, parameter);
+        return this.sortCoffeeListBasedOnParameter(daoCoffeeVan.getAllCoffeeByVanId(vanId),parameter);
     }
 
     @Override
@@ -97,16 +90,31 @@ public class VanServiceImpl implements VanService{
 
     @Override
     public CoffeeVan getCoffeeVanById(Long vanId) {
-        return daoCoffeeVan.findById(vanId).get();
+
+        Optional<CoffeeVan> coffeeVanOpt = daoCoffeeVan.findById(vanId);
+
+        if (coffeeVanOpt.isPresent()){
+            return coffeeVanOpt.get();
+        }
+        else{
+            System.out.println("No such van in db! ");
+        }
+        return null;
+
     }
 
 
     @Override
     public CoffeeVan loadCoffeeVanAutomaticallyBasedOnBudget(CoffeeVan van, double budget) {
 
-        List<List<? extends CoffeeProduct>> listOfCoffeeByTypesAvailable = new ArrayList<>();
+        List<CoffeeProduct> coffeeProduct = daoCoffeeVan.getAllCoffeeByVanId();
+        List<Double> volumeAndWeightList = this.getCurrentVolumeAndWeightOfVan(coffeeProduct);
 
+        List<List<? extends CoffeeProduct>> listOfCoffeeByTypesAvailable = new ArrayList<>();
         listOfCoffeeByTypesAvailable = daoCoffeeVan.getListOfCoffeeByTypesAvailable();
+
+        double cur_volume = volumeAndWeightList.get(0) == null ? 0.0 : volumeAndWeightList.get(0);
+        double cur_weight = volumeAndWeightList.get(1) == null ? 0.0 : volumeAndWeightList.get(1);
 
         int maxSize = 0;
         int curSum = 0;
@@ -124,12 +132,13 @@ public class VanServiceImpl implements VanService{
                 CoffeeProduct coffee = listOfCoffeeByTypesAvailable.get(curList).get(curInListPos);
                 if (coffee != null
                         && coffee.getPrice() + curSum < budget
-                        && coffee.getWeight() + van.getCur_weight() < van.getMax_weight()
-                        && coffee.getVolume() + van.getCur_volume() < van.getMax_volume()
+                        && coffee.getWeight() + cur_weight < van.getMax_weight()
+                        && coffee.getVolume() + cur_volume < van.getMax_volume()
                 ) {
                     coffee.setVan(van);
-                    van.setCur_weight(van.getCur_weight() + coffee.getWeight());
-                    van.setCur_volume(van.getCur_volume() + coffee.getVolume());
+                    coffeeService.update(coffee);
+                    cur_weight+=coffee.getWeight();
+                    cur_volume+= coffee.getVolume();
                     curSum += coffee.getPrice();
                 }
             }
@@ -145,25 +154,35 @@ public class VanServiceImpl implements VanService{
     @Override
     public CoffeeVan loadCoffeeProductsByIdToVan(Long vanId, List<Long> idsOfProducts) {
 
-        List<CoffeeProduct> coffeeProductList = daoCoffeeVan.getAllCoffeeByVanId();
-        Optional<CoffeeVan> vanOpt = daoCoffeeVan.findById(vanId);
+        List<CoffeeProduct> coffeeProduct = daoCoffeeVan.getAllCoffeeByVanId();
+        Optional<CoffeeVan> vanOptional = daoCoffeeVan.findById(vanId);
+
         CoffeeVan van = new CoffeeVan();
-        if(vanOpt.isPresent()){
-            van = vanOpt.get();
+
+
+        if(vanOptional.isPresent()){
+            van = vanOptional.get();
         }
         else {
+            System.out.println("No such van! ");
             return null;
         }
 
-        for (CoffeeProduct coffee : coffeeProductList) {
-            if(van.getMax_volume() - van.getCur_volume() > coffee.getVolume() &&
-                    van.getMax_weight() - van.getCur_weight() > coffee.getWeight()) {
+        List<Double> volumeAndWeightList = this.getCurrentVolumeAndWeightOfVan(coffeeProduct);
+
+        double cur_volume = volumeAndWeightList.get(0) == null ? 0.0 : volumeAndWeightList.get(0);
+        double cur_weight = volumeAndWeightList.get(1) == null ? 0.0 : volumeAndWeightList.get(1);
+
+        for (CoffeeProduct coffee : coffeeProduct) {
+            if(van.getMax_volume() - cur_volume > coffee.getVolume() &&
+                    van.getMax_weight() - cur_weight > coffee.getWeight()) {
 
                 for (Long productId : idsOfProducts) {
-                    if(coffee.getId() == productId){
+                    if(Objects.equals(coffee.getId(), productId)){
                         coffee.setVan(van);
-                        van.setCur_weight(van.getCur_weight() + coffee.getWeight());
-                        van.setCur_volume(van.getCur_volume() + coffee.getVolume());
+                        coffeeService.update(coffee);
+                        cur_weight+=coffee.getWeight();
+                        cur_volume+=coffee.getVolume();
                     }
                 }
 
@@ -173,6 +192,26 @@ public class VanServiceImpl implements VanService{
         return van;
 
     }
+
+    private List<Double> getCurrentVolumeAndWeightOfVan(List<CoffeeProduct> coffeeProducts) {
+
+        double volume = 0.0;
+        double weight = 0.0;
+
+        for (CoffeeProduct coffeeProduct : coffeeProducts){
+            volume+=coffeeProduct.getVolume();
+            weight+=coffeeProduct.getWeight();
+        }
+
+        List<Double> volumeAndWeightList = new ArrayList<>();
+        volumeAndWeightList.add(volume);
+        volumeAndWeightList.add(weight);
+
+        return volumeAndWeightList;
+
+    }
+
+
 
 
 }

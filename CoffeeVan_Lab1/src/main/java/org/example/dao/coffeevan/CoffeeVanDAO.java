@@ -22,5 +22,6 @@ public interface CoffeeVanDAO extends Repository<CoffeeVan, Long> {
 
     List<List<? extends CoffeeProduct>> getListOfCoffeeByTypesAvailable();
 
-    List<CoffeeProduct> getAllCoffeeInVanBasedOnPriceAndWeightRatio();
+    List<CoffeeProduct> getAllCoffeeInVanBasedOnPriceAndWeightRatio(Long vanId);
+
 }

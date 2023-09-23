@@ -80,7 +80,7 @@ public class TypeHelper {
 
         }
 
-        return null;
+        return inputList;
 
 
     }
@@ -111,5 +111,6 @@ public class TypeHelper {
         }
 
     }
+
 
 }

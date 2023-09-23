@@ -60,8 +60,7 @@ class VanServiceTest {
     @Test
     void loadCoffeeVanAutomaticallyBasedOnBudget() {
 
-        //CoffeeVan van = vanService.loadCoffeeVanAutomaticallyBasedOnBudget(vanService.getCoffeeVanById(2L),30.0);
-
+        CoffeeVan van = vanService.loadCoffeeVanAutomaticallyBasedOnBudget(vanService.getCoffeeVanById(4L),30.0);
 
 
     }
@@ -70,4 +69,6 @@ class VanServiceTest {
     void loadCoffeeProductsByIdToVan() {
 
     }
+
+
 }

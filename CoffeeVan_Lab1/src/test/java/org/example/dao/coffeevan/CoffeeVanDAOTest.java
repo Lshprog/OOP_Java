@@ -38,6 +38,24 @@ class CoffeeVanDAOTest {
 
     @Test
     void getAllCoffeeByVanId() {
+
+        List<CoffeeProduct> coffeeProducts = coffeeVanDAO.getAllCoffeeByVanId(4L);
+
+        for(CoffeeProduct coffeeProduct : coffeeProducts){
+            System.out.println(coffeeProduct.toString());
+        }
+
+    }
+
+    @Test
+    void getAllCoffeeNotInVan() {
+
+        List<CoffeeProduct> coffeeProducts = coffeeVanDAO.getAllCoffeeByVanId(4L);
+
+        for(CoffeeProduct coffeeProduct : coffeeProducts){
+            System.out.println(coffeeProduct.toString());
+        }
+
     }
 
     @Test
@@ -50,6 +68,13 @@ class CoffeeVanDAOTest {
 
     @Test
     void getAllCoffeeSortedByParam() {
+
+        List<CoffeeProduct> coffeeProducts = coffeeVanDAO.getAllCoffeeSortedByParam(4L, "price");
+
+        for(CoffeeProduct coffeeProduct : coffeeProducts){
+            System.out.println(coffeeProduct.toString());
+        }
+
     }
 
     @Test
@@ -80,31 +105,4 @@ class CoffeeVanDAOTest {
 
     }
 
-    @Test
-    void testGetAllCoffeeByVanId() {
-    }
-
-    @Test
-    void testGetAllCoffeeByVanId1() {
-    }
-
-    @Test
-    void testGetCoffeeVanByName() {
-    }
-
-    @Test
-    void testGetAllCoffeeSortedByParam() {
-    }
-
-    @Test
-    void testGetCoffeeBasedOnParameters() {
-    }
-
-    @Test
-    void getListOfCoffeeByTypesAvailable() {
-    }
-
-    @Test
-    void getAllCoffeeInVanBasedOnPriceAndWeightRatio() {
-    }
 }

@@ -2,6 +2,7 @@ package org.example.dao;
 
 import org.example.common.dboper.DBOperations;
 
+import java.util.List;
 import java.util.Optional;
 
 public class RepositoryImpl<T, ID> implements Repository<T, ID>{
@@ -27,7 +28,7 @@ public class RepositoryImpl<T, ID> implements Repository<T, ID>{
     }
 
     @Override
-    public Iterable<T> findAll() {
+    public List<T> findAll() {
         return DBOperations.executeQuery(session -> session.createQuery(
                 "FROM " + entityClass.getSimpleName(),
                 entityClass).list());

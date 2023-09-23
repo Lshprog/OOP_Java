@@ -20,11 +20,8 @@ public class CoffeeVan implements Serializable {
 
     private double max_volume;
 
-    private double cur_volume;
-
     private double max_weight;
 
-    private double cur_weight;
 
 
 //    @OneToMany(cascade = CascadeType.ALL,
@@ -33,8 +30,7 @@ public class CoffeeVan implements Serializable {
 
     // Constructors
     public CoffeeVan() {
-        this.cur_volume = 0.0;
-        this.cur_weight = 0.0;
+
     }
 
     public CoffeeVan(Long id, String name, double max_volume, double max_weight) {
@@ -42,16 +38,14 @@ public class CoffeeVan implements Serializable {
         this.name = name;
         this.max_volume = max_volume;
         this.max_weight = max_weight;
-        this.cur_volume = 0.0;
-        this.cur_weight = 0.0;
+
     }
 
     public CoffeeVan(String name, double max_volume, double max_weight) {
         this.name = name;
         this.max_volume = max_volume;
         this.max_weight = max_weight;
-        this.cur_volume = 0.0;
-        this.cur_weight = 0.0;
+
     }
 
     // Getters and Setters
@@ -89,32 +83,13 @@ public class CoffeeVan implements Serializable {
         this.max_volume = max_volume;
     }
 
-    public double getCur_volume() {
-        return cur_volume;
-    }
-
-    public void setCur_volume(double cur_volume) {
-        this.cur_volume = cur_volume;
-    }
-
-    public double getCur_weight() {
-        return cur_weight;
-    }
-
-    public void setCur_weight(double cur_weight) {
-        this.cur_weight = cur_weight;
-    }
-
-
     @Override
     public String toString() {
         return "CoffeeVan{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", max_volume=" + max_volume +
-                ", cur_volume=" + cur_volume +
                 ", max_weight=" + max_weight +
-                ", cur_weight=" + cur_weight +
                 '}';
     }
 }

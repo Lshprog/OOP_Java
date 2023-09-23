@@ -12,7 +12,7 @@ public interface CoffeeService {
 
     void delete(CoffeeProduct coffeeProduct);
 
-
+    void update(CoffeeProduct coffeeProduct);
 
 
 }
