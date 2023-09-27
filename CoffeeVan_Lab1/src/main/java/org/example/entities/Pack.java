@@ -77,4 +77,15 @@ public class Pack implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "Pack{" +
+                "id=" + id +
+                ", price=" + price +
+                ", volume=" + volume +
+                ", weight=" + weight +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

@@ -42,8 +42,6 @@ class PackDAOTest {
     @Test
     void testCheckCoffeeVan() {
 
-
-
     }
 
 

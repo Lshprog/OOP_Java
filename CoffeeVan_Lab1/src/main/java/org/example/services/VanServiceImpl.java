@@ -16,12 +16,32 @@ public class VanServiceImpl implements VanService{
 
 
     @Override
-    public void deleteVan(CoffeeVan coffeeVan) {
-
+    public void saveVan(CoffeeVan coffeeVan) {
+        daoCoffeeVan.save(coffeeVan);
     }
 
     @Override
-    public List<CoffeeProduct> sortCoffeeListBasedOnParameter(List<CoffeeProduct> coffeeList, String parameter) {
+    public void updateVan(CoffeeVan coffeeVan) {
+        daoCoffeeVan.update(coffeeVan);
+    }
+
+    @Override
+    public void deleteVan(CoffeeVan coffeeVan) {
+        daoCoffeeVan.delete(coffeeVan);
+    }
+
+    @Override
+    public CoffeeVan getCoffeeVanByName(String name) {
+        return daoCoffeeVan.getCoffeeVanByName(name);
+    }
+
+    @Override
+    public List<CoffeeVan> getAllCoffeeVans() {
+        return daoCoffeeVan.findAll();
+    }
+
+
+    private List<CoffeeProduct> sortCoffeeListBasedOnParameter(List<CoffeeProduct> coffeeList, String parameter) {
 
         Comparator<CoffeeProduct> ratioComparator = Comparator.comparingDouble(new ToDoubleFunction<CoffeeProduct>() {
             @Override
@@ -57,8 +77,8 @@ public class VanServiceImpl implements VanService{
         return coffeeList;
     }
 
-    @Override
-    public List<CoffeeProduct> sortCoffeeListBasedOnParameters(List<CoffeeProduct> coffeeList, CoffeeFilter filter) {
+
+    private List<CoffeeProduct> sortCoffeeListBasedOnParameters(List<CoffeeProduct> coffeeList, CoffeeFilter filter) {
         return filter.filterCoffee(coffeeList);
     }
 
@@ -97,7 +117,7 @@ public class VanServiceImpl implements VanService{
             return coffeeVanOpt.get();
         }
         else{
-            System.out.println("No such van in db! ");
+            System.out.println("No such van in database! ");
         }
         return null;
 

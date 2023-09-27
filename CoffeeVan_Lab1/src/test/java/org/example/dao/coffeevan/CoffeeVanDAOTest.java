@@ -24,9 +24,9 @@ class CoffeeVanDAOTest {
     @Test
     void testSaveCoffeeVan() {
 
-        /*CoffeeVan coffeeVan = new CoffeeVan("van1_test",18.1,23.0);
-
-        coffeeVanDAO.save(coffeeVan);*/
+//        CoffeeVan coffeeVan = new CoffeeVan("van1_test",18.1,23.0);
+//
+//        coffeeVanDAO.save(coffeeVan);
 
         /*CoffeeVan coffeeVan = coffeeVanDAO.getCoffeeVanByName("van1_test");
 
@@ -39,7 +39,7 @@ class CoffeeVanDAOTest {
     @Test
     void getAllCoffeeByVanId() {
 
-        List<CoffeeProduct> coffeeProducts = coffeeVanDAO.getAllCoffeeByVanId(4L);
+        List<CoffeeProduct> coffeeProducts = coffeeVanDAO.getAllCoffeeByVanId(1L);
 
         for(CoffeeProduct coffeeProduct : coffeeProducts){
             System.out.println(coffeeProduct.toString());
@@ -50,7 +50,7 @@ class CoffeeVanDAOTest {
     @Test
     void getAllCoffeeNotInVan() {
 
-        List<CoffeeProduct> coffeeProducts = coffeeVanDAO.getAllCoffeeByVanId(4L);
+        List<CoffeeProduct> coffeeProducts = coffeeVanDAO.getAllCoffeeByVanId(1L);
 
         for(CoffeeProduct coffeeProduct : coffeeProducts){
             System.out.println(coffeeProduct.toString());
@@ -60,6 +60,11 @@ class CoffeeVanDAOTest {
 
     @Test
     void getCoffeeVanByName() {
+
+        CoffeeVan coffeeVan = coffeeVanDAO.getCoffeeVanByName("name");
+
+        System.out.println(coffeeVan.getName());
+
     }
 
     @Test
@@ -88,6 +93,8 @@ class CoffeeVanDAOTest {
         flavors.add(Flavor.HAZELNUT.name());
         coffeeFilter.setFlavor(flavors);
 
+
+        // Setting sort which by the id 3 which is Robusta, Africa
         coffeeFilter.setSortId(3L);
 
         List<String> classNames = new ArrayList<>();

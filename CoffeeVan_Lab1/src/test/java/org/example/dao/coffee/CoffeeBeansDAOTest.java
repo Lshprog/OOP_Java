@@ -43,7 +43,7 @@ class CoffeeBeansDAOTest {
         daoCoffeeBeans.save(coffeeBeans4);
         daoCoffeeBeans.save(coffeeBeans5);*/
 
-        CoffeeBeans coffeeBeans = daoCoffeeBeans.findById(13L).get();
+        CoffeeBeans coffeeBeans = daoCoffeeBeans.findById(12L).get();
         coffeeBeans.setRoastLevel(RoastLevel.DARK);
         daoCoffeeBeans.update(coffeeBeans);
 

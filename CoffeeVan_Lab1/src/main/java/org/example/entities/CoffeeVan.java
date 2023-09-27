@@ -30,7 +30,8 @@ public class CoffeeVan implements Serializable {
 
     // Constructors
     public CoffeeVan() {
-
+        this.max_volume = 15.0;
+        this.max_weight = 15.0;
     }
 
     public CoffeeVan(Long id, String name, double max_volume, double max_weight) {

@@ -8,13 +8,22 @@ import java.util.List;
 
 public interface VanService {
 
+    void saveVan(CoffeeVan coffeeVan);
+
+    void updateVan(CoffeeVan coffeeVan);
 
     void deleteVan(CoffeeVan coffeeVan);
 
-    // Sorting functions : which take list of coffee as parameters
-    List<CoffeeProduct> sortCoffeeListBasedOnParameter(List<CoffeeProduct> coffeeList, String parameter);
+    CoffeeVan getCoffeeVanByName(String name);
 
-    List<CoffeeProduct> sortCoffeeListBasedOnParameters(List<CoffeeProduct> coffeeList, CoffeeFilter filter);
+    CoffeeVan getCoffeeVanById(Long vanId);
+
+    List<CoffeeVan> getAllCoffeeVans();
+
+    // Sorting functions : which take list of coffee as parameters
+//    List<CoffeeProduct> sortCoffeeListBasedOnParameter(List<CoffeeProduct> coffeeList, String parameter);
+//
+//    List<CoffeeProduct> sortCoffeeListBasedOnParameters(List<CoffeeProduct> coffeeList, CoffeeFilter filter);
 
     // Getter functions : call dao functions to get data from db based on specific criteria
     List<CoffeeProduct> getAllCoffeeAvailableToBeAddedToVan();
@@ -26,8 +35,6 @@ public interface VanService {
     List<CoffeeProduct> getAllCoffeeInVanSortedByParameter(Long vanId, String parameter);
 
     List<CoffeeProduct> getCoffeeInVanBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames);
-
-    CoffeeVan getCoffeeVanById(Long vanId);
 
     // Load functions : load the particular van with products based on something
 

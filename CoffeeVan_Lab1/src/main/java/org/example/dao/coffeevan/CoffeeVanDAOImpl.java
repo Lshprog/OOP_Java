@@ -26,9 +26,13 @@ public class CoffeeVanDAOImpl extends ExtraRepos<CoffeeVan> implements CoffeeVan
 
     @Override
     public List<CoffeeProduct> getAllCoffeeByVanId(Long vanId) {
-        return this.getListOfCoffees("", new AbstractMap.SimpleEntry<>("van",vanId));
+        Optional<CoffeeVan> coffeeVanOpt = this.findById(vanId);
 
-
+        if(coffeeVanOpt.isPresent())
+            return this.getListOfCoffees("", new AbstractMap.SimpleEntry<>("van",vanId));
+        else {
+            return null;
+        }
     }
 
     @Override
