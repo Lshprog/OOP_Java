@@ -19,8 +19,8 @@ public class CoffeeFilter {
     private Double maxWeight;
     private List<String> roastLevel;
     private Long vanId;
-    private Long sortId;
-    private Long packId;
+    private List<String> sortId;
+    private List<String> packId;
 
     // Attributes specific to InstantCoffee
     private List<String> dissolvability;
@@ -62,30 +62,30 @@ public class CoffeeFilter {
         if (maxWeight != null && coffee.getWeight() > maxWeight) {
             return false;
         }
-        if(roastLevel != null && !roastLevel.contains(coffee.getRoastLevel().name())){
+        if (roastLevel != null && !roastLevel.contains(coffee.getRoastLevel().name())) {
             return false;
         }
         if (dissolvability != null && coffee instanceof InstantCoffee) {
             InstantCoffee instantCoffee = (InstantCoffee) coffee;
-            if(!dissolvability.contains(instantCoffee.getDissolvability().name())){
+            if (!dissolvability.contains(instantCoffee.getDissolvability().name())) {
                 return false;
             }
         }
         if (flavor != null && coffee instanceof InstantCoffee) {
             InstantCoffee instantCoffee = (InstantCoffee) coffee;
-            if(!flavor.contains(instantCoffee.getFlavor().name())){
+            if (!flavor.contains(instantCoffee.getFlavor().name())) {
                 return false;
             }
         }
         if (grindType != null && coffee instanceof GroundCoffee) {
             GroundCoffee groundCoffee = (GroundCoffee) coffee;
-            if(!grindType.contains(groundCoffee.getGrindType().name())){
+            if (!grindType.contains(groundCoffee.getGrindType().name())) {
                 return false;
             }
         }
         if (intensity != null && coffee instanceof GroundCoffee) {
             GroundCoffee groundCoffee = (GroundCoffee) coffee;
-            if(!intensity.contains(groundCoffee.getIntensity().name())){
+            if (!intensity.contains(groundCoffee.getIntensity().name())) {
                 return false;
             }
         }
@@ -118,11 +118,17 @@ public class CoffeeFilter {
         if (vanId != null) {
             criteriaList.add(new FilterNode("van.id", "vanId", Collections.singletonList(String.valueOf(vanId)), Condition.EQUAL, "Long"));
         }
+//        if (sortId != null) {
+//            criteriaList.add(new FilterNode("sort.id", "sortId", Collections.singletonList(String.valueOf(sortId)), Condition.EQUAL, "Long"));
+//        }
+//        if (packId != null) {
+//            criteriaList.add(new FilterNode("pack.id", "packId", Collections.singletonList(String.valueOf(packId)), Condition.EQUAL, "Long"));
+//        }
         if (sortId != null) {
-            criteriaList.add(new FilterNode("sort.id", "sortId", Collections.singletonList(String.valueOf(sortId)), Condition.EQUAL, "Long"));
+            criteriaList.add(new FilterNode("sort.id", "sortId", sortId, Condition.LIST, "Long"));
         }
         if (packId != null) {
-            criteriaList.add(new FilterNode("pack.id", "packId", Collections.singletonList(String.valueOf(packId)), Condition.EQUAL, "Long"));
+            criteriaList.add(new FilterNode("pack.id", "packId", packId, Condition.LIST, "Long"));
         }
         if (roastLevel != null) {
             criteriaList.add(new FilterNode("roastLevel", "roastLevel", roastLevel, Condition.LIST, "RoastLevel"));
@@ -240,19 +246,19 @@ public class CoffeeFilter {
         this.vanId = vanId;
     }
 
-    public Long getSortId() {
+    public List<String> getSortId() {
         return sortId;
     }
 
-    public void setSortId(Long sortId) {
-        this.sortId = sortId;
+    public void setSortId(List<String> sortIds) {
+        this.sortId = sortIds;
     }
 
-    public Long getPackId() {
+    public List<String> getPackId() {
         return packId;
     }
 
-    public void setPackId(Long packId) {
-        this.packId = packId;
+    public void setPackId(List<String> packIds) {
+        this.packId = packIds;
     }
 }

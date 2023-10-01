@@ -398,10 +398,32 @@ public class Main {
 
     private static void filterBasedOnParameters() {
         CoffeeFilter filter = new CoffeeFilter();
+        Long vanId = null;
+        System.out.print("Enter the van ID or leave empty if you want to filter coffee not in any van: ");
+        String input = scanner.nextLine();
+
+        if (input.trim().isEmpty()) {
+            // User wants to leave it empty
+            System.out.println("Filtering for coffee not in any van.");
+        } else {
+            // User entered a value, try to parse it as a long
+            try {
+                vanId = Long.parseLong(input);
+                CoffeeVan van = vanService.getCoffeeVanById(vanId);
+                if (van == null) {
+                    System.out.println("Incorrect van id!");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input!");
+                return;
+            }
+        }
+
 
         System.out.println("Types of coffee (0 - CoffeeBeans, 1 - InstantCoffee, 2 - GroundCoffee)");
         System.out.println("Enter the coffee types to filter (012 for all, 02 for all except InstantCoffee, etc):");
-        String input = scanner.nextLine();
+        input = scanner.nextLine();
 
         List<String> classNames = new ArrayList<>();
         if (input.contains("0")) {
@@ -414,11 +436,10 @@ public class Main {
             classNames.add("GroundCoffee");
         }
 
-        System.out.print("Enter the van ID or leave empty if you want to filter coffee not in any van");
-        long vanId = scanner.nextLong();
-        scanner.nextLine();
-
-
+        if (classNames.isEmpty()){
+            System.out.println("No types!");
+            return;
+        }
 
         // Show all available sorts and let the user choose
         System.out.println("\nAvailable Coffee Sorts:");
@@ -428,10 +449,9 @@ public class Main {
         }
         System.out.print("Enter the IDs of the sorts to filter by (comma-separated): ");
         String sortIdsInput = scanner.nextLine();
-        List<Long> sortIds = Arrays.stream(sortIdsInput.split(","))
-                .map(Long::parseLong)
+        List<String> sortIds = Arrays.stream(sortIdsInput.split(","))
                 .collect(Collectors.toList());
-        //filter.set(sortIds);
+        filter.setSortId(sortIds);
 
         // Show all available packs and let the user choose
         System.out.println("\nAvailable Packs:");
@@ -441,10 +461,9 @@ public class Main {
         }
         System.out.print("Enter the IDs of the packs to filter by (comma-separated): ");
         String packIdsInput = scanner.nextLine();
-        List<Long> packIds = Arrays.stream(packIdsInput.split(","))
-                .map(Long::parseLong)
+        List<String> packIds = Arrays.stream(packIdsInput.split(","))
                 .collect(Collectors.toList());
-        //filter.setPackIds(packIds);
+        filter.setPackId(packIds);
 
 
         // Prompt user for filter criteria
@@ -484,42 +503,82 @@ public class Main {
             filter.setMaxWeight(Double.parseDouble(maxWeightInput));
         }
 
+        System.out.println("\nAvailable Roast levels: ");
+        System.out.println(" LIGHT, MEDIUM, DARK ");
         System.out.print("Enter roast levels (comma-separated, or leave empty for no filter): ");
         String roastLevelsInput = scanner.nextLine();
         if (!roastLevelsInput.isEmpty()) {
-            List<String> roastLevels = Arrays.asList(roastLevelsInput.split(","));
-            filter.setRoastLevel(roastLevels);
+            String[] roastLevels = roastLevelsInput.split(",");
+            List<String> upperCaseRoastLevels = new ArrayList<>();
+
+            for (String str : roastLevels) {
+                upperCaseRoastLevels.add(str.toUpperCase());
+            }
+
+            filter.setRoastLevel(upperCaseRoastLevels);
         }
 
         if (classNames.contains("InstantCoffee")) {
+            System.out.println("\nAvailable Dissolvability levels: ");
+            System.out.println(" FAST, MEDIUM, SLOW ");
             System.out.print("Enter dissolvability options (comma-separated, or leave empty for no filter): ");
             String dissolvabilityInput = scanner.nextLine();
             if (!dissolvabilityInput.isEmpty()) {
-                List<String> dissolvabilityOptions = Arrays.asList(dissolvabilityInput.split(","));
-                filter.setDissolvability(dissolvabilityOptions);
+                String[] dissolvabilityOptions = dissolvabilityInput.split(",");
+                List<String> upperCaseDissolvabilityOptions = new ArrayList<>();
+
+                for (String str : dissolvabilityOptions) {
+                    upperCaseDissolvabilityOptions.add(str.toUpperCase());
+                }
+
+                filter.setDissolvability(upperCaseDissolvabilityOptions);
             }
 
+            System.out.println("\nAvailable Flavors: ");
+            System.out.println(" VANILLA, HAZELNUT ");
             System.out.print("Enter flavor options (comma-separated, or leave empty for no filter): ");
             String flavorInput = scanner.nextLine();
             if (!flavorInput.isEmpty()) {
-                List<String> flavorOptions = Arrays.asList(flavorInput.split(","));
-                filter.setFlavor(flavorOptions);
+                String[] flavorOptions = flavorInput.split(",");
+                List<String> upperCaseFlavorOptions = new ArrayList<>();
+
+                for (String str : flavorOptions) {
+                    upperCaseFlavorOptions.add(str.toUpperCase());
+                }
+
+                filter.setFlavor(upperCaseFlavorOptions);
             }
         }
 
         if(classNames.contains("GroundCoffee")) {
+            System.out.println("\nAvailable Grind types: ");
+            System.out.println(" COARSE, MEDIUM, FINE ");
             System.out.print("Enter grind types (comma-separated, or leave empty for no filter): ");
             String grindTypesInput = scanner.nextLine();
             if (!grindTypesInput.isEmpty()) {
-                List<String> grindTypes = Arrays.asList(grindTypesInput.split(","));
-                filter.setGrindType(grindTypes);
+                String[] grindTypes = grindTypesInput.split(",");
+                List<String> upperCaseGrindTypes = new ArrayList<>();
+
+                for (String str : grindTypes) {
+                    upperCaseGrindTypes.add(str.toUpperCase());
+                }
+
+                filter.setGrindType(upperCaseGrindTypes);
             }
 
-            System.out.print("Enter intensity options (comma-separated, or leave empty for no filter): ");
+            System.out.println("\nAvailable Intensity levels: ");
+            System.out.println(" MILD, MEDIUM, STRONG ");
+            System.out.print("Enter intensity levels (comma-separated, or leave empty for no filter): ");
             String intensityInput = scanner.nextLine();
             if (!intensityInput.isEmpty()) {
-                List<String> intensityOptions = Arrays.asList(intensityInput.split(","));
-                filter.setIntensity(intensityOptions);
+                String[] intensityOptions = intensityInput.split(",");
+                List<String> upperCaseIntensityOptions = new ArrayList<>();
+
+                for (String str : intensityOptions) {
+                    upperCaseIntensityOptions.add(str.toUpperCase());
+                }
+
+                filter.setIntensity(upperCaseIntensityOptions);
             }
         }
 

@@ -98,7 +98,9 @@ class CoffeeVanDAOTest {
 
 
         // Setting sort which by the id 3 which is Robusta, Africa
-        coffeeFilter.setSortId(3L);
+        List<String> sortids = new ArrayList<>();
+        sortids.add("3");
+        coffeeFilter.setSortId(sortids);
 
         List<String> classNames = new ArrayList<>();
         classNames.add("InstantCoffee");

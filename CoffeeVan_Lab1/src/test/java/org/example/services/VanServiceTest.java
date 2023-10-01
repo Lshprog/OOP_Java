@@ -62,9 +62,9 @@ class VanServiceTest {
         CoffeeVan coffeeVan = vanService.getCoffeeVanByName("van1_test");
 
         CoffeeFilter coffeeFilter = new CoffeeFilter();
-        //coffeeFilter.setMaxPrice(4.54);
-        coffeeFilter.setMaxPrice(5.54);
-        coffeeFilter.setMinPrice(5.0);
+        coffeeFilter.setMaxPrice(4.54);
+        //coffeeFilter.setMaxPrice(5.54);
+        //coffeeFilter.setMinPrice(5.0);
 
 
         List<String> flavors = new ArrayList<>();
@@ -73,7 +73,9 @@ class VanServiceTest {
 
 
         // Setting sort which by the id 3 which is Robusta, Africa
-        coffeeFilter.setSortId(3L);
+        List<String> sortids = new ArrayList<>();
+        sortids.add("3");
+        coffeeFilter.setSortId(sortids);
 
         List<String> classNames = new ArrayList<>();
         classNames.add("InstantCoffee");
