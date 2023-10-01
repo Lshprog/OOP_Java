@@ -10,9 +10,11 @@ import org.example.common.dboper.DBOperations;
 import org.example.common.filters.FilterNode;
 import org.example.dao.ExtraRepos;
 import org.example.entities.*;
+import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class CoffeeVanDAOImpl extends ExtraRepos<CoffeeVan> implements CoffeeVanDAO {
 
@@ -56,73 +58,90 @@ public class CoffeeVanDAOImpl extends ExtraRepos<CoffeeVan> implements CoffeeVan
 
     }
 
-   @Override
-   public List<CoffeeProduct> getCoffeeBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames) {
+    @Override
+    public List<CoffeeProduct> getCoffeeBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames) {
 
-       List<CoffeeProduct> finalCoffees = new ArrayList<>();
+        List<CoffeeProduct> finalCoffees = new ArrayList<>();
 
-       for(String className : classNames) {
-           finalCoffees.addAll(Objects.requireNonNull(DBOperations.executeQuery(session -> {
-               StringBuilder hql = new StringBuilder("SELECT c FROM ");
+        List<Function<Session, List<CoffeeProduct>>> databaseOperations = new ArrayList<>();
 
-               List<FilterNode> criteriaList = filter.getFilterRanges();
+        for (String className : classNames) {
+            databaseOperations.add(session -> {
+                StringBuilder hql = new StringBuilder("SELECT c FROM ");
 
-               hql.append(className).append(" c WHERE c.van.id = :vanId");
+                List<FilterNode> criteriaList = filter.getFilterRanges();
 
-               criteriaList.forEach((criteria) -> {
+                hql.append(className).append(" c WHERE c.van.id = :vanId");
 
-                   switch (criteria.getCondition()) {
-                       case MAX -> {
-                           hql.append(" AND c.").append(criteria.getAttrEntity()).append(" <= :").append(criteria.getAttrFilter());
-                       }
-                       case MIN -> {
-                           hql.append(" AND c.").append(criteria.getAttrEntity()).append(" >= :").append(criteria.getAttrFilter());
-                       }
-                       case EQUAL -> {
-                           hql.append(" AND c.").append(criteria.getAttrEntity()).append(" IN (:").append(criteria.getAttrFilter()).append(")");
-                       }
-                       case LIST -> {
-                           if(TypeHelper.validateCombinationClasses(criteria.getDatatype(),className)){
-                               hql.append(" AND c.").append(criteria.getAttrEntity()).append(" IN (:").append(criteria.getAttrFilter()).append(")");
-                           }
-                       }
-                   }
-               });
+                criteriaList.forEach((criteria) -> {
+
+                    switch (criteria.getCondition()) {
+                        case MAX -> {
+                            hql.append(" AND c.").append(criteria.getAttrEntity()).append(" <= :").append(criteria.getAttrFilter());
+                        }
+                        case MIN -> {
+                            hql.append(" AND c.").append(criteria.getAttrEntity()).append(" >= :").append(criteria.getAttrFilter());
+                        }
+                        case EQUAL -> {
+                            hql.append(" AND c.").append(criteria.getAttrEntity()).append(" IN (:").append(criteria.getAttrFilter()).append(")");
+                        }
+                        case LIST -> {
+                            if (TypeHelper.validateCombinationClasses(criteria.getDatatype(), className)) {
+                                hql.append(" AND c.").append(criteria.getAttrEntity()).append(" IN (:").append(criteria.getAttrFilter()).append(")");
+                            }
+                        }
+                    }
+                });
+
+                Query<CoffeeProduct> query = session.createQuery(hql.toString(), CoffeeProduct.class);
+
+                criteriaList.forEach((criteria) -> {
+                    if (TypeHelper.validateCombinationClasses(criteria.getDatatype(), className)) {
+                        query.setParameter(criteria.getAttrFilter(), TypeHelper.convertToList(criteria.getValues(), criteria.getDatatype()));
+                    }
+                });
+
+                query.setParameter("vanId", vanId);
+
+                return query.list();
+            });
+        }
+
+        List<List<CoffeeProduct>> results = DBOperations.executeQueries(databaseOperations);
 
 
-               Query<CoffeeProduct> query = session.createQuery(hql.toString(), CoffeeProduct.class);
+        if (results!=null){
+            results.forEach(finalCoffees::addAll);
+        }
 
-               criteriaList.forEach((criteria) -> {
-                   if(TypeHelper.validateCombinationClasses(criteria.getDatatype(),className)){
-                       query.setParameter(criteria.getAttrFilter(), TypeHelper.convertToList(criteria.getValues(), criteria.getDatatype()));
-                   }
-               });
+        return finalCoffees;
+    }
 
-               query.setParameter("vanId", vanId);
-
-               return query.list();
-           })));
-       }
-
-       return finalCoffees;
-   }
 
     @Override
     public List<List<? extends CoffeeProduct>> getListOfCoffeeByTypesAvailable() {
         List<List<? extends CoffeeProduct>> listOfCoffeeByTypesAvailable = new ArrayList<>();
 
-        for (Class<? extends CoffeeProduct> coffeeClass : coffeeClasses){
-            listOfCoffeeByTypesAvailable.add(Objects.requireNonNull(DBOperations.executeQuery(session -> {
+        List<Function<Session, List<? extends CoffeeProduct>>> databaseOperations = new ArrayList<>();
+
+        for (Class<? extends CoffeeProduct> coffeeClass : coffeeClasses) {
+            databaseOperations.add(session -> {
                 Query<? extends CoffeeProduct> query = session.createQuery(
                         "SELECT c FROM " + coffeeClass.getSimpleName() + " c WHERE c.van.id IS NULL ", coffeeClass);
 
                 return query.list();
-            })));
+            });
+        }
 
+        List<List<? extends CoffeeProduct>> results = DBOperations.executeQueries(databaseOperations);
+
+        if (results!=null){
+            listOfCoffeeByTypesAvailable.addAll(results);
         }
 
         return listOfCoffeeByTypesAvailable;
     }
+
 
 
     @Override
@@ -139,9 +158,6 @@ public class CoffeeVanDAOImpl extends ExtraRepos<CoffeeVan> implements CoffeeVan
 
         DBOperations.executeTransaction(session -> session.remove(coffeeVan));
     }
-
-
-
 
 
 

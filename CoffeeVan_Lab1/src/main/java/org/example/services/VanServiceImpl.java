@@ -105,7 +105,14 @@ public class VanServiceImpl implements VanService{
 
     @Override
     public List<CoffeeProduct> getCoffeeInVanBasedOnParameters(Long vanId, CoffeeFilter filter, List<String> classNames) {
-        return daoCoffeeVan.getCoffeeBasedOnParameters(vanId, filter, classNames);
+
+        List<CoffeeProduct> result = daoCoffeeVan.getCoffeeBasedOnParameters(vanId, filter, classNames);
+
+        if(result.isEmpty()){
+            System.out.println("Nothing found for these parameters!");
+        }
+
+        return result;
     }
 
     @Override

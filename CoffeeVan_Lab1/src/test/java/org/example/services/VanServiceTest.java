@@ -1,12 +1,15 @@
 package org.example.services;
 
+import org.example.common.enums.Flavor;
 import org.example.common.enums.RoastLevel;
+import org.example.common.filters.CoffeeFilter;
 import org.example.entities.CoffeeBeans;
 import org.example.entities.CoffeeProduct;
 import org.example.entities.CoffeeVan;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,6 +58,35 @@ class VanServiceTest {
 
     @Test
     void getCoffeeInVanBasedOnParameters() {
+
+        CoffeeVan coffeeVan = vanService.getCoffeeVanByName("van1_test");
+
+        CoffeeFilter coffeeFilter = new CoffeeFilter();
+        //coffeeFilter.setMaxPrice(4.54);
+        coffeeFilter.setMaxPrice(5.54);
+        coffeeFilter.setMinPrice(5.0);
+
+
+        List<String> flavors = new ArrayList<>();
+        flavors.add(Flavor.HAZELNUT.name());
+        coffeeFilter.setFlavor(flavors);
+
+
+        // Setting sort which by the id 3 which is Robusta, Africa
+        coffeeFilter.setSortId(3L);
+
+        List<String> classNames = new ArrayList<>();
+        classNames.add("InstantCoffee");
+        classNames.add("GroundCoffee");
+        classNames.add("CoffeeBeans");
+
+
+        List<CoffeeProduct> coffeeProducts = vanService.getCoffeeInVanBasedOnParameters(coffeeVan.getId(),coffeeFilter,classNames);
+
+        for(CoffeeProduct coffeeProduct : coffeeProducts){
+            System.out.println(coffeeProduct.toString());
+        }
+
     }
 
     @Test

@@ -2,9 +2,12 @@ package org.example.dao;
 
 import org.example.common.dboper.DBOperations;
 import org.example.entities.*;
+import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class ExtraRepos<T> extends RepositoryImpl<T, Long>{
 
@@ -21,12 +24,13 @@ public class ExtraRepos<T> extends RepositoryImpl<T, Long>{
         coffeeClasses.add(CoffeeBeans.class);
     }
 
-    protected  List<CoffeeProduct> getListOfCoffees(String ordering,AbstractMap.SimpleEntry<String, Long> parameterPair) {
+    protected List<CoffeeProduct> getListOfCoffees(String ordering,AbstractMap.SimpleEntry<String, Long> parameterPair) {
         List<CoffeeProduct> finalCoffees = new ArrayList<>();
 
-        for (Class<? extends CoffeeProduct> coffeeClass : coffeeClasses) {
+        List<Function<Session, List<? extends CoffeeProduct>>> databaseOperations = new ArrayList<>();
 
-            finalCoffees.addAll(Objects.requireNonNull(DBOperations.executeQuery(session -> {
+        for (Class<? extends CoffeeProduct> coffeeClass : coffeeClasses) {
+            databaseOperations.add(session -> {
 
                 StringBuilder hql = new StringBuilder("SELECT c FROM ");
                 hql.append(coffeeClass.getSimpleName());
@@ -35,12 +39,11 @@ public class ExtraRepos<T> extends RepositoryImpl<T, Long>{
                 String parameter = parameterPair.getKey();
                 Long id = parameterPair.getValue();
 
-                if(id == null){
+                if (id == null) {
                     hql.append(parameter);
                     hql.append(".id IS NULL ");
                     hql.append(ordering);
-                }
-                else{
+                } else {
                     hql.append(parameter);
                     hql.append(".id = :");
                     hql.append(parameter);
@@ -50,15 +53,23 @@ public class ExtraRepos<T> extends RepositoryImpl<T, Long>{
 
                 Query<? extends CoffeeProduct> query = session.createQuery(hql.toString(), coffeeClass);
 
-                if(id != null){
+                if (id != null) {
                     query.setParameter(parameter, id);
                 }
 
                 return query.list();
-            })));
+            });
+        }
+
+        List<List<? extends CoffeeProduct>> results = DBOperations.executeQueries(databaseOperations);
+
+
+        if (results!=null){
+            results.forEach(finalCoffees::addAll);
         }
 
         return finalCoffees;
+
 
     }
 
@@ -67,8 +78,10 @@ public class ExtraRepos<T> extends RepositoryImpl<T, Long>{
         String key = deletePair.getKey();
         Long id = deletePair.getValue();
 
+        List<Consumer<Session>> databaseOperations = new ArrayList<>();
+
         for (Class<? extends CoffeeProduct> coffeeClass : coffeeClasses) {
-            DBOperations.executeTransaction(session -> {
+            databaseOperations.add(session -> {
                 Query<?> query = session.createQuery(
                                 "DELETE FROM " + coffeeClass.getSimpleName() + " c WHERE c."+key+".id = :atrid")
                         .setParameter("atrid", id);
@@ -76,6 +89,8 @@ public class ExtraRepos<T> extends RepositoryImpl<T, Long>{
             });
         }
 
+        DBOperations.executeTransactions(databaseOperations);
     }
+
 
 }

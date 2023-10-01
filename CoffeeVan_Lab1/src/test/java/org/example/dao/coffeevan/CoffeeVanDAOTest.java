@@ -87,7 +87,10 @@ class CoffeeVanDAOTest {
         CoffeeVan coffeeVan = coffeeVanDAO.getCoffeeVanByName("van1_test");
 
         CoffeeFilter coffeeFilter = new CoffeeFilter();
-        coffeeFilter.setMaxPrice(4.54);
+        //coffeeFilter.setMaxPrice(4.54);
+        coffeeFilter.setMaxPrice(5.54);
+        coffeeFilter.setMinPrice(5.0);
+
 
         List<String> flavors = new ArrayList<>();
         flavors.add(Flavor.HAZELNUT.name());
