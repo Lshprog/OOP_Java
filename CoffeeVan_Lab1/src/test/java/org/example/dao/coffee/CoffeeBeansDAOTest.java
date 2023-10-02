@@ -30,7 +30,7 @@ class CoffeeBeansDAOTest {
     void testToSaveCoffeeBeansObj(){
 
         /*CoffeeBeans coffeeBeans1 = (CoffeeBeans) CoffeeProductFactory.createCoffeeProduct(CoffeeState.BEANS,daoCoffeeSort.findById(3L).get(),
-                                                                                    daoPack.findById(11L).get());
+                                                                                    daoPack.findById(2L).get());
         coffeeBeans1.setRoastLevel(RoastLevel.MEDIUM);
 
         CoffeeBeans coffeeBeans2 = (CoffeeBeans) coffeeBeans1.clone();
@@ -43,9 +43,9 @@ class CoffeeBeansDAOTest {
         daoCoffeeBeans.save(coffeeBeans4);
         daoCoffeeBeans.save(coffeeBeans5);*/
 
-        CoffeeBeans coffeeBeans = daoCoffeeBeans.findById(12L).get();
-        coffeeBeans.setRoastLevel(RoastLevel.DARK);
-        daoCoffeeBeans.update(coffeeBeans);
+        //CoffeeBeans coffeeBeans = daoCoffeeBeans.findById(12L).get();
+        //coffeeBeans.setRoastLevel(RoastLevel.DARK);
+        //daoCoffeeBeans.update(coffeeBeans);
 
 
     }

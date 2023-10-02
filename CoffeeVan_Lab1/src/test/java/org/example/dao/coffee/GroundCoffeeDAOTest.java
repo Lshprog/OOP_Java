@@ -36,8 +36,8 @@ class GroundCoffeeDAOTest {
     @Test
     void testSaveGroundCoffee() {
 
-        /*GroundCoffee groundCoffee1 = (GroundCoffee) CoffeeProductFactory.createCoffeeProduct(CoffeeState.GROUND,daoCoffeeSort.findById(5L).get(),
-                daoPack.findById(12L).get());
+        /*GroundCoffee groundCoffee1 = (GroundCoffee) CoffeeProductFactory.createCoffeeProduct(CoffeeState.GROUND,daoCoffeeSort.findById(1L).get(),
+                daoPack.findById(2L).get());
         groundCoffee1.setRoastLevel(RoastLevel.MEDIUM);
         groundCoffee1.setGrindType(GrindType.MEDIUM);
         groundCoffee1.setIntensity(Intensity.STRONG);

@@ -26,8 +26,8 @@ class InstantCoffeeDAOTest {
     @Test
     void testSaveInstantCoffeeDAO() {
 
-        InstantCoffee instantCoffee1 = (InstantCoffee) CoffeeProductFactory.createCoffeeProduct(CoffeeState.INSTANT,daoCoffeeSort.findById(5L).get(),
-                daoPack.findById(12L).get());
+        InstantCoffee instantCoffee1 = (InstantCoffee) CoffeeProductFactory.createCoffeeProduct(CoffeeState.INSTANT,daoCoffeeSort.findById(3L).get(),
+                daoPack.findById(1L).get());
         instantCoffee1.setRoastLevel(RoastLevel.MEDIUM);
         instantCoffee1.setDissolvability(Dissolvability.MEDIUM);
         instantCoffee1.setFlavor(Flavor.HAZELNUT);

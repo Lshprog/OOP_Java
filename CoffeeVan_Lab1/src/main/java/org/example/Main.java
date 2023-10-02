@@ -1,10 +1,8 @@
 package org.example;
 
+import org.example.common.enums.*;
 import org.example.common.filters.CoffeeFilter;
-import org.example.entities.CoffeeProduct;
-import org.example.entities.CoffeeSort;
-import org.example.entities.CoffeeVan;
-import org.example.entities.Pack;
+import org.example.entities.*;
 import org.example.services.CoffeeService;
 import org.example.services.CoffeeServiceImpl;
 import org.example.services.VanService;
@@ -51,7 +49,9 @@ public class Main {
             System.out.println("10. Create new Pack for coffee");
             System.out.println("101. Update pack");
             System.out.println("102. Delete pack");
-            System.out.println("11. Exit");
+            System.out.println("11. Find coffee by id");
+            System.out.println("111. Create new coffee product");
+            System.out.println("12. Exit");
             System.out.print("Enter your choice: ");
 
 
@@ -123,6 +123,12 @@ public class Main {
                     showAllPackTypes();
                     break;
                 case 11:
+                    findCoffeeProductById();
+                    break;
+                case 111:
+                    createNewCoffeeProduct();
+                    break;
+                case 12:
                     exit = true;
                     break;
                 default:
@@ -131,6 +137,133 @@ public class Main {
         }
     }
 
+    private static void createNewCoffeeProduct() {
+        System.out.println("===== Create New Coffee Product =====");
+        System.out.println("Select the type of coffee product:");
+        System.out.println("1. Coffee Beans");
+        System.out.println("2. Ground Coffee");
+        System.out.println("3. Instant Coffee");
+        int typeChoice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline character
+
+        // Prompt user for CoffeeSort (with default value if necessary)
+        List<CoffeeSort> availableCoffeeSorts = coffeeService.getAllCoffeeSorts();
+        // Prompt user for CoffeeSort (with default value if necessary)
+        System.out.println("Available Coffee Sorts:");
+        for (int i = 0; i < availableCoffeeSorts.size(); i++) {
+            System.out.println((i+1) + ". " + availableCoffeeSorts.get(i).toString());
+        }
+        System.out.print("Enter the number corresponding to the CoffeeSort: ");
+        int coffeeSortChoice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline character
+
+        if (coffeeSortChoice < 1 || coffeeSortChoice > availableCoffeeSorts.size()) {
+            System.out.println("Invalid choice. Please try again.");
+            return;
+        }
+
+        CoffeeSort coffeeSort = availableCoffeeSorts.get(coffeeSortChoice - 1);
+
+        // Prompt user for Pack (with default value if necessary)
+        List<Pack> availablePacks = coffeeService.getAllPackTypes();
+        System.out.println("Available Packs:");
+        for (int i = 0; i < availablePacks.size(); i++) {
+            System.out.println((i+1) + ". " + availablePacks.get(i).getDescription());
+        }
+        System.out.print("Enter the number corresponding to the Pack: ");
+        int packChoice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline character
+
+        if (packChoice < 1 || packChoice > availablePacks.size()) {
+            System.out.println("Invalid choice. Please try again.");
+            return;
+        }
+
+        Pack pack = availablePacks.get(packChoice - 1);
+        // Prompt user for CoffeeVan (assuming you have a way to retrieve or create one)
+        CoffeeVan van = null; // Implement logic to get CoffeeVan
+
+        // Set unique attributes for CoffeeBeans
+        RoastLevel roastLevel = getEnumFromUserInput("Roast Level (LIGHT, MEDIUM, DARK):", RoastLevel.class);
+        if (roastLevel == null) return;
+
+        switch (typeChoice) {
+            case 1:
+                CoffeeBeans coffeeBeans = new CoffeeBeans(coffeeSort, pack, van);
+
+                coffeeBeans.setRoastLevel(roastLevel);
+                coffeeService.save(coffeeBeans);
+                System.out.println("Coffee Beans saved successfully.");
+                break;
+            case 2:
+                GroundCoffee groundCoffee = new GroundCoffee(coffeeSort, pack, van);
+
+                // Set unique attributes for GroundCoffee
+                GrindType grindType = getEnumFromUserInput("Grind Type (COARSE, MEDIUM, FINE):", GrindType.class);
+                if (grindType == null) return;
+                groundCoffee.setGrindType(grindType);
+
+                Intensity intensity = getEnumFromUserInput("Intensity (MILD, MEDIUM, STRONG):", Intensity.class);
+                if (intensity == null) return;
+                groundCoffee.setIntensity(intensity);
+
+                groundCoffee.setRoastLevel(roastLevel);
+                coffeeService.save(groundCoffee);
+                System.out.println("Ground Coffee saved successfully.");
+                break;
+            case 3:
+                InstantCoffee instantCoffee = new InstantCoffee(coffeeSort, pack, van);
+
+                // Set unique attributes for InstantCoffee
+                Dissolvability dissolvability = getEnumFromUserInput("Dissolvability (FAST, MEDIUM, SLOW):", Dissolvability.class);
+                if (dissolvability == null) return;
+                instantCoffee.setDissolvability(dissolvability);
+
+                Flavor flavor = getEnumFromUserInput("Flavor (VANILLA, HAZELNUT):", Flavor.class);
+                if (flavor == null) return;
+                instantCoffee.setFlavor(flavor);
+
+                instantCoffee.setRoastLevel(roastLevel);
+                coffeeService.save(instantCoffee);
+                System.out.println("Instant Coffee saved successfully.");
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                break;
+        }
+    }
+
+    // Helper method to get enum from user input
+    private static <T extends Enum<T>> T getEnumFromUserInput(String prompt, Class<T> enumType) {
+        System.out.println(prompt);
+        System.out.print("Enter your choice: ");
+        String userInput = scanner.nextLine().toUpperCase();
+
+        try {
+            return Enum.valueOf(enumType, userInput);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid input. Please try again.");
+            return null;
+        }
+    }
+
+
+
+
+    private static void findCoffeeProductById() {
+        System.out.print("Enter the ID of the coffee product: ");
+        Long id = scanner.nextLong();
+        scanner.nextLine(); // Consume newline character
+
+        CoffeeProduct coffeeProduct = coffeeService.getCoffeeProductById(id);
+
+        if (coffeeProduct != null) {
+            System.out.println("Coffee Product found:");
+            System.out.println(coffeeProduct);
+        } else {
+            System.out.println("Coffee Product with ID " + id + " not found.");
+        }
+    }
 
     private static void listAllAvailableCoffee() {
         List<CoffeeProduct> allCoffee = coffeeService.getAllCoffee();

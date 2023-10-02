@@ -24,9 +24,9 @@ class CoffeeVanDAOTest {
     @Test
     void testSaveCoffeeVan() {
 
-//        CoffeeVan coffeeVan = new CoffeeVan("van1_test",18.1,23.0);
+        //CoffeeVan coffeeVan = new CoffeeVan("van1_test",18.1,23.0);
 //
-//        coffeeVanDAO.save(coffeeVan);
+        //coffeeVanDAO.save(coffeeVan);
 
         /*CoffeeVan coffeeVan = coffeeVanDAO.getCoffeeVanByName("van1_test");
 
@@ -74,7 +74,7 @@ class CoffeeVanDAOTest {
     @Test
     void getAllCoffeeSortedByParam() {
 
-        List<CoffeeProduct> coffeeProducts = coffeeVanDAO.getAllCoffeeSortedByParam(4L, "price");
+        List<CoffeeProduct> coffeeProducts = coffeeVanDAO.getAllCoffeeSortedByParam(1L, "price");
 
         for(CoffeeProduct coffeeProduct : coffeeProducts){
             System.out.println(coffeeProduct.toString());
