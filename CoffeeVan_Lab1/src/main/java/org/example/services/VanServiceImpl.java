@@ -43,6 +43,11 @@ public class VanServiceImpl implements VanService{
 
     private List<CoffeeProduct> sortCoffeeListBasedOnParameter(List<CoffeeProduct> coffeeList, String parameter) {
 
+        if(coffeeList == null){
+            System.out.println("Empty list!");
+            return null;
+        }
+
         Comparator<CoffeeProduct> ratioComparator = Comparator.comparingDouble(new ToDoubleFunction<CoffeeProduct>() {
             @Override
             public double applyAsDouble(CoffeeProduct coffee) {

@@ -54,9 +54,13 @@ public class Main {
             System.out.println("12. Exit");
             System.out.print("Enter your choice: ");
 
-
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline character
+            int choice = -1;
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine();
+            } catch (Exception e) {
+                scanner.nextLine();
+            }
 
             switch (choice) {
                 case 0:
@@ -482,8 +486,10 @@ public class Main {
 
         List<CoffeeProduct> coffeeInVan = vanService.getAllCoffeeInVanBasedOnPriceAndWeightRatio(vanId);
         System.out.println("Coffee in Van (Sorted by price/weight ratio):");
-        for (CoffeeProduct coffee : coffeeInVan) {
-            System.out.println(coffee);
+        if(coffeeInVan != null) {
+            for (CoffeeProduct coffee : coffeeInVan) {
+                System.out.println(coffee);
+            }
         }
     }
 
